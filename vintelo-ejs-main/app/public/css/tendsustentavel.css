@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Prata, Montserrat;
+    background-color: #fff;
+    color: #333;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 2%;
+}
+
+header img {
+  height: 40px;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+h1 {
+    font-size: 20px;
+    text-align: center;
+    flex: 1;
+}
+
+.light {
+    font-weight: normal;
+    color: #888;
+}
+
+.main-content {
+    text-align: center;
+    padding: 5%;
+}
+
+.description {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.main-img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.gallery {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.gallery-item {
+    width: 48%;
+    text-align: left;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.gallery-item p {
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.view-all {
+    display: block;
+    text-align: right;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #888;
+    text-decoration: none;
+}
+
+.view-all:hover {
+    text-decoration: underline;
+}
+
+/*                                                      Rodapé                                                      */
+.footer {
+    background-color: #818F84;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  .footer .footer-image {
+    height: 50px;
+    margin-bottom: 20px;
+  }
+  
+  .footer .social-media {
+    margin-bottom: 20px;
+  }
+  
+  .footer .social-media p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .footer .social-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .footer .social-link img {
+    height: 40px;
+    transition: transform 0.3s;
+  }
+  
+  .footer .social-link img:hover {
+    transform: scale(1.2);
+  }
+  
+  .copyright {
+    font-size: 0.9rem;
+    margin-top: 20px;
+  }
+  
+  /*                                            Responsividade para Mobile                                              */
+  @media (max-width: 768px) {
+    .grid {
+      grid-template-columns: 2fr;
+    }
+  
+    .celula {
+      margin: 0 auto;
+    }
+  
+  }
+  

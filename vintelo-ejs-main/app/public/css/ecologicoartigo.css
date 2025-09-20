@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Prata, Montserrat;
+    color: #333;
+    background-color: #f8f8f8;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    text-decoration: none;
+    color: #000;
+}
+
+h1 {
+    font-size: 38px;
+    margin-bottom: 20px;
+}
+
+.highlight {
+    font-weight: bold;
+}
+
+.main-info {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main-info img {
+    max-width: 90%;
+}
+
+.grid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.grid-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.fast-fashion, .moda-sustentavel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.date-info {
+    font-size: 12px;
+    color: #777;
+    margin-top: 10px;
+}
+
+section {
+    padding: 20px;
+}
+
+.fast-fashion, .moda-sustentavel {
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 18px;
+    color: #4d4d4d;
+}
+
+p {
+    margin: 10px 0;
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+section img {
+    width: 100%;
+    max-width: 300px;
+    display: block;
+    margin: 15px auto;
+}
+
+/*                                                      Rodapé                                                      */
+.footer {
+    background-color: #818F84;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  .footer .footer-image {
+    height: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .footer .social-media {
+    margin-bottom: 20px;
+  }
+  
+  .footer .social-media p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .footer .social-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .footer .social-link img {
+    height: 60px;
+    transition: transform 0.3s;
+  }
+  
+  .footer .social-link img:hover {
+    transform: scale(1.2);
+  }
+  
+  .copyright {
+    font-size: 0.9rem;
+    margin-top: 20px;
+  }
+  
+  /*                                            Responsividade para Mobile                                              */
+  @media (max-width: 768px) {
+    .grid {
+      grid-template-columns: 2fr;
+    }
+  
+    .celula {
+      margin: 0 auto;
+    }
+  
+    .footer .social-links {
+      flex-direction: column;
+    }
+  }
+  

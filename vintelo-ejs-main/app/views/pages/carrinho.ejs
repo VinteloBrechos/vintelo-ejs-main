@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintélo</title>
+    <link rel="stylesheet" href="css/carrinho.css">
+
+    <link rel="icon" href="/imagens/brilhoescuro.png" type="image/x-icon">
+    
+</head>
+<body>
+    <!-- Header Mobile -->
+    <header class="mobile-header">
+        <a href="/homecomprador" class="back-btn">
+            <img src="imagens/seta.png" alt="Voltar">
+        </a>
+        <h1>Carrinho</h1>
+        <img src="imagens/icone saco.png" alt="Carrinho" class="cart-icon">
+    </header>
+
+    <!-- Header Desktop -->
+    <div class="desktop-header">
+        <div class="top-bar">
+            <p>10% OFF na primeira compra</p>
+        </div>
+        <header class="main-header">
+            <a href="/homecomprador">
+                <img src="imagens/logo.png" class="img-logo" alt="Vintélo">
+            </a>
+            <nav>
+                <a href="#">Vestidos</a>
+                <a href="#">Saias</a>
+                <a href="#">Blusas</a>
+                <a href="#">Calças</a>
+                <a href="#">Outros</a>
+            </nav>
+            <div class="search-profile">
+                <form>
+                    <input type="text" placeholder="Buscar...">
+                </form>
+                <ul>
+                    <li><a href="/carrinho"><img src="imagens/icone saco.png" class="img-tamanho" alt="Sacola"></a></li>
+                    <li><a href="/perfilcliente"><img src="imagens/imagem sem cadastro.avif" class="maria" alt="Perfil"></a></li>
+                    <li><a href="#"><img src="imagens/icone coraçao.png" class="img-tamanho" alt="Favoritos"></a></li>
+                </ul>
+            </div>
+        </header>
+    </div>
+
+    <main>
+        <!-- Lista de Itens do Carrinho -->
+        <div class="cart-items">
+            <h2>Seus Itens (<span id="items-count">2</span>)</h2>
+            
+            <div class="cart-item" data-id="1" data-price="60.00">
+                <div class="item-image">
+                    <img src="imagens/carrinho1.png" alt="Vestido Branco Longo">
+                </div>
+                <div class="item-details">
+                    <h3>Vestido Branco Longo</h3>
+                    <p class="item-info">Tamanho: M • Laviviana Brechó</p>
+                    <div class="item-controls">
+                        <div class="quantity-control">
+                            <button class="qty-btn" onclick="updateQuantity(1, -1)">-</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="updateQuantity(1, 1)">+</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeItem(1)">🗑️</button>
+                    </div>
+                </div>
+                <div class="item-price">
+                    <span class="price">R$ 60,00</span>
+                </div>
+            </div>
+
+            <div class="cart-item" data-id="2" data-price="45.00">
+                <div class="item-image">
+                    <img src="imagens/carrinho2.png" alt="Vestido Med Roxo">
+                </div>
+                <div class="item-details">
+                    <h3>Vestido Med Roxo</h3>
+                    <p class="item-info">Tamanho: P • Karine Brechó</p>
+                    <div class="item-controls">
+                        <div class="quantity-control">
+                            <button class="qty-btn" onclick="updateQuantity(2, -1)">-</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="updateQuantity(2, 1)">+</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeItem(2)">🗑️</button>
+                    </div>
+                </div>
+                <div class="item-price">
+                    <span class="price">R$ 45,00</span>
+                </div>
+            </div>
+
+            <!-- Estado Vazio -->
+            <div class="empty-cart" id="empty-cart" style="display: none;">
+                <img src="imagens/sacola vazia.png" alt="Carrinho vazio">
+                <h3>Seu carrinho está vazio</h3>
+                <p>Adicione produtos incríveis!</p>
+                <a href="/homecomprador" class="continue-btn">Continuar Comprando</a>
+            </div>
+        </div>
+
+        <!-- Resumo do Pedido -->
+        <div class="order-summary">
+            <h3>Resumo</h3>
+            <div class="summary-line">
+                <span>Subtotal</span>
+                <span>R$ <span id="subtotal">105,00</span></span>
+            </div>
+            <div class="summary-line">
+                <span>Frete</span>
+                <span id="shipping">Grátis</span>
+            </div>
+            <div class="summary-line total">
+                <span>Total</span>
+                <span>R$ <span id="total">105,00</span></span>
+            </div>
+            
+            <div class="coupon-section">
+                <input type="text" id="coupon-input" placeholder="Cupom de desconto">
+                <button onclick="applyCoupon()">Aplicar</button>
+            </div>
+            
+            <button class="checkout-btn" onclick="proceedToCheckout()">Finalizar Compra</button>
+        </div>
+
+        <!-- Endereço -->
+        <div class="address-section">
+            <h3>Endereço de Entrega</h3>
+            <div class="address-options">
+                <div class="address-card current-location" onclick="getCurrentLocation()">
+                    <div class="location-icon">📍</div>
+                    <div class="address-info">
+                        <p class="address-title">Usar localização atual</p>
+                        <small class="address-subtitle">Detectar automaticamente</small>
+                    </div>
+                    <div class="location-status" id="location-status">📡</div>
+                </div>
+                <div class="address-card manual-address" onclick="addManualAddress()">
+                    <img src="imagens/mapa.png" alt="Endereço">
+                    <div class="address-info">
+                        <p class="address-title">Adicionar endereço</p>
+                        <small class="address-subtitle">Inserir manualmente</small>
+                    </div>
+                </div>
+            </div>
+            <div class="current-address" id="current-address" style="display: none;">
+                <div class="address-display">
+                    <div class="address-icon">🏠</div>
+                    <div class="address-details">
+                        <p class="address-text" id="address-text">Carregando...</p>
+                        <small class="address-distance">Entrega em até 2 dias úteis</small>
+                    </div>
+                    <button class="change-address" onclick="changeAddress()">Alterar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagamento -->
+        <div class="payment-section">
+            <h3>Forma de Pagamento</h3>
+            <div class="payment-methods">
+                <button class="payment-btn" onclick="selectPayment('pix')" data-method="pix">
+                    <img src="imagens/pix.png" alt="PIX">
+                    <span>PIX</span>
+                    <small>Aprovação imediata</small>
+                </button>
+                <button class="payment-btn" onclick="selectPayment('card')" data-method="card">
+                    <img src="imagens/visa.png" alt="Cartão">
+                    <span>Cartão</span>
+                    <small>Até 12x sem juros</small>
+                </button>
+                <button class="payment-btn" onclick="selectPayment('boleto')" data-method="boleto">
+                    <img src="imagens/boleto.png" alt="Boleto">
+                    <span>Boleto</span>
+                    <small>Vence em 3 dias</small>
+                </button>
+            </div>
+            
+            <!-- Detalhes do PIX -->
+            <div class="payment-details pix-details" id="pix-details" style="display: none;">
+                <div class="pix-info">
+                    <div class="pix-icon">📱</div>
+                    <h4>Pagamento via PIX</h4>
+                    <p>Transferência instantânea e segura</p>
+                    <div class="pix-benefits">
+                        <span class="benefit">✓ Aprovação imediata</span>
+                        <span class="benefit">✓ Sem taxas</span>
+                        <span class="benefit">✓ Disponível 24h</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Detalhes do Cartão -->
+            <div class="payment-details card-details" id="card-details" style="display: none;">
+                <div class="card-form">
+                    <h4>Dados do Cartão</h4>
+                    <div class="form-row">
+                        <input type="text" placeholder="Número do cartão" maxlength="19" id="card-number">
+                        <div class="card-icons">
+                            <img src="imagens/visa.png" alt="Visa">
+                        </div>
+                    </div>
+                    <div class="form-row-split">
+                        <input type="text" placeholder="MM/AA" maxlength="5" id="card-expiry">
+                        <input type="text" placeholder="CVV" maxlength="3" id="card-cvv">
+                    </div>
+                    <input type="text" placeholder="Nome no cartão" id="card-name">
+                    <div class="installments">
+                        <label>Parcelas:</label>
+                        <select id="installments-select">
+                            <option value="1">1x de R$ 105,00 (sem juros)</option>
+                            <option value="2">2x de R$ 52,50 (sem juros)</option>
+                            <option value="3">3x de R$ 35,00 (sem juros)</option>
+                            <option value="6">6x de R$ 17,50 (sem juros)</option>
+                            <option value="12">12x de R$ 8,75 (sem juros)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Detalhes do Boleto -->
+            <div class="payment-details boleto-details" id="boleto-details" style="display: none;">
+                <div class="boleto-info">
+                    <div class="boleto-icon">🏦</div>
+                    <h4>Pagamento via Boleto</h4>
+                    <p>Pague em qualquer banco, lotérica ou app</p>
+                    <div class="boleto-warning">
+                        <span class="warning-icon">⚠️</span>
+                        <span>Prazo de pagamento: 3 dias úteis</span>
+                    </div>
+                    <div class="boleto-benefits">
+                        <span class="benefit">✓ Sem necessidade de conta bancária</span>
+                        <span class="benefit">✓ Pague em qualquer lugar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sugestões -->
+        <div class="suggestions">
+            <h3>Você pode gostar</h3>
+            <div class="carousel-container">
+                <div class="carousel-wrapper">
+                    <div class="carousel-track">
+                        <div class="suggestion-item">
+                            <img src="imagens/vestido branco.png" alt="Vestido Branco">
+                            <h4>Vestido Branco</h4>
+                            <p>R$ 55,00</p>
+                            <button onclick="addSuggestion()">Adicionar</button>
+                        </div>
+                        <div class="suggestion-item">
+                            <img src="imagens/saia preta.png" alt="Saia Preta">
+                            <h4>Saia Preta</h4>
+                            <p>R$ 30,00</p>
+                            <button onclick="addSuggestion()">Adicionar</button>
+                        </div>
+                        <div class="suggestion-item">
+                            <img src="imagens/vestido rosa.png" alt="Vestido Rosa">
+                            <h4>Vestido Rosa</h4>
+                            <p>R$ 48,00</p>
+                            <button onclick="addSuggestion()">Adicionar</button>
+                        </div>
+                        <div class="suggestion-item">
+                            <img src="imagens/cropped rosa.png" alt="Cropped Rosa">
+                            <h4>Cropped Rosa</h4>
+                            <p>R$ 25,00</p>
+                            <button onclick="addSuggestion()">Adicionar</button>
+                        </div>
+                        <div class="suggestion-item">
+                            <img src="imagens/conjunto.png" alt="Conjunto Bege">
+                            <h4>Conjunto Bege</h4>
+                            <p>R$ 65,00</p>
+                            <button onclick="addSuggestion()">Adicionar</button>
+                        </div>
+                        <div class="suggestion-item">
+                            <img src="imagens/vestido roxo.png" alt="Vestido Roxo">
+                            <h4>Vestido Roxo</h4>
+                            <p>R$ 42,00</p>
+                            <button onclick="addSuggestion()">Adicionar</button>
+                        </div>
+                        <div class="suggestion-item">
+                            <img src="imagens/regata branca.png" alt="Regata Branca">
+                            <h4>Regata Branca</h4>
+                            <p>R$ 22,00</p>
+                            <button onclick="addSuggestion()">Adicionar</button>
+                        </div>
+                        <div class="suggestion-item">
+                            <img src="imagens/saia longa bege.png" alt="Saia Longa Bege">
+                            <h4>Saia Longa Bege</h4>
+                            <p>R$ 38,00</p>
+                            <button onclick="addSuggestion()">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+        <!--                                                    Rodapé                                                      -->
+        <footer class="footer">
+            <img src="imagens/logo2.jpeg" alt="Imagem do Rodapé" class="footer-image">
+            <section class="social-media">
+              <p class="p-footer">Siga nossas redes sociais</p>
+              <ul class="social-links">
+                <li><a href="https://facebook.com" target="_blank" class="social-link"><img src="imagens/Facebook.png"
+                      alt="Facebook"></a></li>
+                <li><a href="https://twitter.com" target="_blank" class="social-link"><img src="imagens/Pinterest.png"
+                      alt="Pinterest"></a></li>
+                <li><a href="https://www.instagram.com/vintelobrechos" target="_blank" class="social-link"><img
+                      src="imagens/Instagram.png" alt="Instagram"></a></li>
+              </ul>
+            </section>
+            <p class="copyright">©2024 Vintélo. Todos os direitos reservados.</p>
+          </footer>
+
+    <script src="script/carrinho.js"></script>
+</body>
+</html>

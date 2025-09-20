@@ -1,0 +1,251 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Prata, Montserrat;
+  background-color: #fff;
+  color: #333;
+}
+
+/* Cabeçalho do menu */
+.top-bar {
+  background-color: #8c2b44;
+  text-align: center;
+  color: white;
+  padding: 10px 0;
+  font-size: 25px;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 100px;
+  background-color: #fff;
+}
+
+.main-header nav a {
+  color: #333;
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 25px;
+}
+
+.search-profile {
+  display: flex;
+  align-items: center;
+}
+
+.search-profile form input {
+  padding: 8px;
+  border: 1px solid #8c2b44;
+  border-radius: 24px;
+  width: 100%;
+}
+
+.search-profile ul {
+  display: flex;
+  list-style: none;
+  gap: 10px;
+  padding: 0px 50px;
+}
+
+.img-tamanho {
+  width: 50px;
+  height: auto;
+}
+
+.maria {
+  width: 50px;
+  height: auto;
+}
+
+.img-logo {
+  width: 120px;
+  height: auto;
+}
+
+/*                                                        Container geral                                            */
+.titulo{
+  text-align: center;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.page-header h1 {
+  font-size: 32px;
+}
+
+.light {
+  font-weight: normal;
+  color: #888;
+  text-align: center;
+}
+
+.highlight {
+  color: #6b8c72;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Conteúdo principal */
+.main-content {
+  text-align: center;
+  padding: 5%;
+}
+
+.description {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.main-img {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.gallery-item {
+  width: 48%;
+  max-width: 400px;
+}
+
+.gallery-item img {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.view-all {
+  display: block;
+  text-align: right;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #888;
+}
+
+/* Rodapé */
+.footer {
+  background-color: #818F84;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.footer-image {
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.social-media p {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.social-links {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-link img {
+  height: 60px;
+  transition: transform 0.3s;
+}
+
+.social-link img:hover {
+  transform: scale(1.2);
+}
+
+.copyright {
+  font-size: 0.9rem;
+  margin-top: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+      padding: 0 10px;
+  }
+
+  .page-header h1 {
+      font-size: 24px;
+  }
+
+  .highlight {
+      font-size: 24px;
+  }
+
+  .description {
+      font-size: 14px;
+  }
+
+  .subtitle {
+      font-size: 12px;
+  }
+
+  .gallery {
+      flex-direction: column;
+  }
+
+  .gallery-item {
+      width: 100%;
+  }
+
+  .view-all {
+      font-size: 14px;
+  }
+}
+
+/*                                                  responsividade                                                        */
+@media (max-width: 768px){
+  .oculto-mobile {
+    display: none
+  }
+}
+
+@media (min-width: 992px){
+  .oculto-mobile {
+    display: block
+  }
+}
+
+@media (max-width: 768px){
+  .oculto-desktop {
+    display: block
+  }
+}
+
+@media (min-width: 992px){
+  .oculto-desktop {
+    display: none
+  }
+}           

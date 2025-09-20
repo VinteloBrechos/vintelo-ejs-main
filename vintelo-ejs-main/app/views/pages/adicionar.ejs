@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintélo</title>
+    <link rel="stylesheet" href="css/adicionar.css">
+
+    <link rel="icon" href="/imagens/brilhoescuro.png" type="image/x-icon">
+    
+</head>
+<body>
+    <!-- Header Desktop -->
+    <section class="desktop-header">
+        <section class="top-bar">
+            <p>10% OFF na primeira compra</p>
+        </section>
+        <header class="main-header">
+            <a href="/homevendedor">
+                <img src="imagens/logo.png" class="img-logo" alt="Vintélo">
+            </a>
+            <nav>
+                <a href="#">Vestidos</a>
+                <a href="#">Saias</a>
+                <a href="#">Blusas</a>
+                <a href="#">Calças</a>
+                <a href="#">Outros</a>
+            </nav>
+            <section class="search-profile">
+                <form>
+                    <input type="text" placeholder="Buscar...">
+                </form>
+                <ul>
+                    <li><a href="#"><img src="imagens/icone saco.png" class="img-tamanho" alt="Sacola"></a></li>
+                    <li><a href="/menuvendedor"><img src="imagens/imagem sem cadastro.avif" class="maria" alt="Perfil"></a></li>
+                    <li><a href="#"><img src="imagens/icone coraçao.png" class="img-tamanho" alt="Favoritos"></a></li>
+                </ul>
+            </section>
+        </header>
+    </section>
+
+    <!-- Header Mobile -->
+    <section class="mobile-header">
+        <header>
+            <nav class="grid">
+                <a href="/homevendedor">
+                    <img src="imagens/seta.png" alt="Voltar">
+                </a>
+                <img src="imagens/logo.png" alt="Vintélo">
+                <a href="/carrinho">
+                    <img src="imagens/carrinho.png" alt="Carrinho">
+                </a>
+            </nav>
+        </header>
+    </section>
+
+    <main>
+        <section class="container">
+            <h1>Adicionar Peça</h1>
+            
+            <section class="content-wrapper">
+                <!-- Upload de Fotos -->
+                <section class="photo-section">
+                    <section class="main-photo">
+                        <img id="main-photo" src="imagens/add foto.png" alt="Foto principal">
+                        <button class="photo-btn" onclick="selectMainPhoto()">
+                            <span>+</span>
+                        </button>
+                        <input type="file" id="main-photo-input" accept="image/*" style="display: none;" onchange="handlePhotoUpload(this, 'main-photo')">
+                    </section>
+                    
+                    <section class="photo-thumbnails">
+                        <section class="thumbnail-slot" onclick="selectPhoto(0)">
+                            <img id="thumb-0" src="imagens/add foto.png" alt="Miniatura 1">
+                            <input type="file" id="thumb-input-0" accept="image/*" style="display: none;" onchange="handlePhotoUpload(this, 'thumb-0')">
+                        </section>
+                        <section class="thumbnail-slot" onclick="selectPhoto(1)">
+                            <button class="add-photo-btn">+</button>
+                            <input type="file" id="thumb-input-1" accept="image/*" style="display: none;" onchange="handlePhotoUpload(this, 'thumb-1')">
+                        </section>
+                        <section class="thumbnail-slot" onclick="selectPhoto(2)">
+                            <button class="add-photo-btn">+</button>
+                            <input type="file" id="thumb-input-2" accept="image/*" style="display: none;" onchange="handlePhotoUpload(this, 'thumb-2')">
+                        </section>
+                        <section class="thumbnail-slot" onclick="selectPhoto(3)">
+                            <button class="add-photo-btn">+</button>
+                            <input type="file" id="thumb-input-3" accept="image/*" style="display: none;" onchange="handlePhotoUpload(this, 'thumb-3')">
+                        </section>
+                    </section>
+                    <p class="photo-instructions">Clique para adicionar fotos da galeria</p>
+                </section>
+
+                <!-- Formulário -->
+                <section class="form-section">
+                    <form class="item-form" onsubmit="submitForm(event)">
+                        <section class="form-row">
+                            <section class="form-group">
+                                <label for="item-name">Nome da peça</label>
+                                <input type="text" id="item-name" name="name" placeholder="Ex: Vestido longo floral" required>
+                            </section>
+                            <section class="form-group desktop-only">
+                                <label for="item-price">Preço</label>
+                                <input type="text" id="item-price" name="price" placeholder="R$ 0,00" oninput="formatPrice(this)" required>
+                            </section>
+                        </section>
+                        
+                        <section class="form-row">
+                            <section class="form-group">
+                                <label for="item-category">Categoria</label>
+                                <select id="item-category" name="category" required>
+                                    <option value="">Selecione a categoria</option>
+                                    <option value="vestidos">Vestidos</option>
+                                    <option value="saias">Saias</option>
+                                    <option value="blusas">Blusas</option>
+                                    <option value="calcas">Calças</option>
+                                    <option value="acessorios">Acessórios</option>
+                                </select>
+                            </section>
+                            <section class="form-group desktop-only">
+                                <label for="item-color">Cor</label>
+                                <input type="text" id="item-color" name="color" placeholder="Ex: Azul marinho" required>
+                            </section>
+                        </section>
+
+                        <!-- Mobile only fields -->
+                        <section class="mobile-only">
+                            <section class="form-group">
+                                <label for="item-price-mobile">Preço</label>
+                                <input type="text" id="item-price-mobile" name="price" placeholder="R$ 0,00" oninput="formatPrice(this)" required>
+                            </section>
+                            
+                            <section class="form-group">
+                                <label for="item-color-mobile">Cor</label>
+                                <input type="text" id="item-color-mobile" name="color" placeholder="Ex: Azul marinho" required>
+                            </section>
+                        </section>
+                        
+                        <section class="form-row">
+                            <section class="form-group">
+                                <label for="item-condition">Estado da peça</label>
+                                <select id="item-condition" name="condition" required>
+                                    <option value="">Selecione o estado</option>
+                                    <option value="novo">Novo com etiqueta</option>
+                                    <option value="sem-uso">Sem uso</option>
+                                    <option value="pouco-uso">Pouco uso</option>
+                                    <option value="usado">Usado</option>
+                                </select>
+                            </section>
+                            <section class="form-group">
+                                <label>Tamanho</label>
+                                <section class="size-options">
+                                    <button type="button" class="size-btn" data-size="PP" onclick="selectSize(this)">PP</button>
+                                    <button type="button" class="size-btn" data-size="P" onclick="selectSize(this)">P</button>
+                                    <button type="button" class="size-btn" data-size="M" onclick="selectSize(this)">M</button>
+                                    <button type="button" class="size-btn" data-size="G" onclick="selectSize(this)">G</button>
+                                    <button type="button" class="size-btn" data-size="GG" onclick="selectSize(this)">GG</button>
+                                </section>
+                                <input type="hidden" id="selected-size" name="size" required>
+                            </section>
+                        </section>
+                        
+                        <section class="form-group">
+                            <label for="item-description">Descrição (opcional)</label>
+                            <textarea id="item-description" name="description" placeholder="Descreva detalhes sobre a peça, marca, tecido, etc..."></textarea>
+                        </section>
+
+                        <button type="submit" class="submit-btn">
+                            Enviar para Curadoria
+                        </button>
+                    </form>
+                </section>
+            </section>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <img src="imagens/logo.png" alt="Vintélo" class="footer-image">
+        <section class="social-media">
+            <p class="p-footer">Siga-nos nas redes sociais</p>
+            <ul class="social-links">
+                <li><a href="https://www.instagram.com/vintelobrechos" target="_blank" class="social-link"><img src="imagens/Instagram.png" alt="Instagram"></a></li>
+                <li><a href="https://facebook.com" target="_blank" class="social-link"><img src="imagens/Facebook.png" alt="Facebook"></a></li>
+                <li><a href="#" class="social-link"><img src="imagens/TikTok.png" alt="TikTok"></a></li>
+            </ul>
+        </section>
+        <p class="copyright">&copy; 2024 Vintélo. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script/adicionar.js"></script>
+</body>
+</html>

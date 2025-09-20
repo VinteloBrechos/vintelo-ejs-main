@@ -1,0 +1,149 @@
+/*                                                  Reset básico                                                        */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Prata, Montserrat;
+    background-color: #fff;
+    color: #333;
+    line-height: 1.6;
+}
+
+/*                                              Container principal                                                    */
+.container {
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+}
+
+/*                                              Estilo do cabeçalho                                                    */
+header {
+    background-color: #fff;
+    padding: 20px;
+  }
+
+header .grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header img {
+    height: 80px;
+  }
+
+.back-button {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+h1 {
+    font-size: 44px;
+    font-weight: bold;
+    margin-top: 40px;
+    position: center;
+}
+
+/*                                                    Estilo do conteúdo                                                */
+
+.image-main {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    padding: 0px 50px;
+    position: center;
+}
+
+.img-responsiva {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    padding: 5%;
+    position: center;
+}
+
+.subtitle {
+    font-size: 12px;
+    color: #888;
+    text-align: left;
+}
+
+.description {
+    font-size: 14px;
+    color: #555;
+    text-align: justify;
+    padding: 8%;
+}
+
+.description-2 {
+  font-size: 14px;
+  color: #555;
+  text-align: justify;
+  padding: 0px 50px;
+}
+/*                                                      Rodapé                                                      */
+.footer {
+    background-color: #818F84;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  .footer .footer-image {
+    height: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .footer .social-media {
+    margin-bottom: 20px;
+  }
+  
+  .footer .social-media p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .footer .social-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .footer .social-link img {
+    height: 60px;
+    transition: transform 0.3s;
+  }
+  
+  .footer .social-link img:hover {
+    transform: scale(1.2);
+  }
+  
+  .copyright {
+    font-size: 0.9rem;
+    margin-top: 20px;
+  }
+  
+  /*                                            Responsividade para Mobile                                              */
+  @media (max-width: 768px) {
+    .grid {
+      grid-template-columns: 2fr;
+    }
+  
+    .celula {
+      margin: 0 auto;
+    }
+  
+    .footer .social-links {
+      flex-direction: column;
+    }
+  }
+  
