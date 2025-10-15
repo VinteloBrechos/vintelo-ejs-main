@@ -2427,6 +2427,27 @@ router.get('/api/produtos', async function(req, res){
         res.json([]);
     }
 });
+
+// API endpoint para novidades (usado pelo carrossel das homes)
+router.get('/api/produtos/novidades', async function(req, res){
+    try {
+        const [produtos] = await pool.query(`
+            SELECT p.ID_PRODUTO, p.NOME_PRODUTO, p.PRECO, p.TIPO_PRODUTO,
+                   img.URL_IMG
+            FROM PRODUTOS p 
+            LEFT JOIN IMG_PRODUTOS img ON p.ID_PRODUTO = img.ID_PRODUTO
+            WHERE p.STATUS_PRODUTO = 'd'
+            GROUP BY p.ID_PRODUTO
+            ORDER BY p.DATA_CADASTRO DESC
+            LIMIT 8
+        `);
+        
+        res.json(produtos || []);
+    } catch (error) {
+        console.log('Erro ao buscar novidades via API:', error);
+        res.json([]);
+    }
+});
 router.get('/categorias/filtrar/:categoryId', categoriaController.filtrarProdutos);
 
 router.get('/editarbanners', bannerController.mostrarFormulario);

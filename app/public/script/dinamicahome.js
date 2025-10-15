@@ -20,105 +20,14 @@ function showSection(section) {
     
     gridTitle.textContent = titles[section] || section.charAt(0).toUpperCase() + section.slice(1);
     
+    // Carregar produtos reais para Novidades
+    if (section === 'novidades') {
+        loadNovidades();
+        return;
+    }
+    
     const content = {
-        novidades: `
-            <article class="product-card">
-                <a href="/produto2"><img src="imagens/vestido branco.png" alt="Vestido branco com decote"></a>
-                <h2>Vestido branco com decote</h2>
-                <p class="price">R$49,99</p>
-                <p class="Descrição">ou em 2x de R$25,00</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <a href="/produto3"><img src="imagens/vestido roxo.png" alt="Vestido roxo de manga com decote"></a>
-                <h2>Vestido roxo de manga com decote</h2>
-                <p class="price">R$39,99</p>
-                <p class="Descrição">ou em 2x de R$20,00</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <a href="/produto4"><img src="imagens/conjunto de blusa rosa.png" alt="Conjunto rosa de lã"></a>
-                <h2>Conjunto rosa de lã</h2>
-                <p class="price">R$29,99</p>
-                <p class="Descrição">ou em 2x de R$15,00</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <a href="/produto1"><img src="imagens/regata branca.png" alt="Regata branca"></a>
-                <h2>Regata branca</h2>
-                <p class="price">R$19,99</p>
-                <p class="Descrição">ou em 2x de R$10,00</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <img src="imagens/cropped flor.png" alt="cropped flor">
-                <h2>Cropped Floral</h2>
-                <p class="price">R$49,99</p>
-                <p class="Descrição">ou em 2x de R$25,00</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <img src="imagens/vestido branco2.png" alt="vestido branco2">
-                <h2>Vestido Branco com decote</h2>
-                <p class="price">R$39,99</p>
-                <p class="Descrição">ou em 2x de R$20,00</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <img src="imagens/cropped cinza.png" alt="Cropped Cinza">
-                <h2>Cropped Cinza</h2>
-                <p class="price">R$35,00</p>
-                <p class="Descrição">ou em 2x de R$17,50</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <img src="imagens/saia rosa brilhante.png" alt="Saia Rosa">
-                <h2>Saia Rosa Brilhante</h2>
-                <p class="price">R$32,00</p>
-                <p class="Descrição">ou em 2x de R$16,00</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <img src="imagens/saia preta brilhante.png" alt="Saia Preta">
-                <h2>Saia Preta Brilhante</h2>
-                <p class="price">R$38,00</p>
-                <p class="Descrição">ou em 2x de R$19,00</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <img src="imagens/regatinha branca.png" alt="Regatinha">
-                <h2>Regatinha Branca</h2>
-                <p class="price">R$25,00</p>
-                <p class="Descrição">ou em 2x de R$12,50</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <img src="imagens/cropped verde.png" alt="Cropped Verde">
-                <h2>Cropped Verde</h2>
-                <p class="price">R$28,00</p>
-                <p class="Descrição">ou em 2x de R$14,00</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <a href="/produto1"><img src="imagens/vestido roxo2.png" alt="vestido roxo2"></a>
-                <h2>Vestido Roxo Com Torção</h2>
-                <p class="price">R$45,00</p>
-                <p class="Descrição">ou em 2x de R$22,50</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-        `,
+
         descontos: `
             <article class="product-card">
                 <span class="discount-tag">14% OFF</span>
@@ -336,4 +245,47 @@ function showSection(section) {
             link.classList.add('active');
         }
     });
+}
+
+function loadNovidades() {
+    const productGrid = document.querySelector('.product-grid');
+    
+    productGrid.style.opacity = '0.5';
+    productGrid.innerHTML = '<p>Carregando produtos...</p>';
+    
+    fetch('/api/produtos/novidades')
+        .then(response => response.json())
+        .then(produtos => {
+            let html = '';
+            produtos.forEach(produto => {
+                const preco = parseFloat(produto.PRECO).toFixed(2).replace('.', ',');
+                const precoParcelado = (parseFloat(produto.PRECO) / 2).toFixed(2).replace('.', ',');
+                const imagem = produto.URL_IMG ? '/' + produto.URL_IMG : '/imagens/produto-default.png';
+                
+                html += `
+                    <article class="product-card">
+                        <a href="/produto/${produto.ID_PRODUTO}">
+                            <img src="${imagem}" alt="${produto.NOME_PRODUTO}">
+                        </a>
+                        <h2>${produto.NOME_PRODUTO}</h2>
+                        <p class="price">R$${preco}</p>
+                        <p class="Descrição">ou em 2x de R$${precoParcelado}</p>
+                        <button class="favorite" onclick="toggleFavorite(this, ${produto.ID_PRODUTO})">
+                            <img src="imagens/coração de fav2.png">
+                        </button>
+                        <button class="cart" onclick="addToCart(${produto.ID_PRODUTO})">
+                            <img src="imagens/sacola.png" class="img-sacola">
+                        </button>
+                    </article>
+                `;
+            });
+            
+            productGrid.innerHTML = html;
+            productGrid.style.opacity = '1';
+        })
+        .catch(error => {
+            console.error('Erro ao carregar produtos:', error);
+            productGrid.innerHTML = '<p>Erro ao carregar produtos</p>';
+            productGrid.style.opacity = '1';
+        });
 }

@@ -59,7 +59,7 @@
             <li>
               <a href="/perfilvender">
                 <section class="profile-section">
-                  <img src="<%= autenticado && autenticado.imagem ? autenticado.imagem : '/imagens/imagem sem cadastro.avif' %>" alt="Perfil" class="profile-pic maria">
+                  <img src="<%= autenticado && autenticado.imagem ? autenticado.imagem : '/imagens/imagem sem cadastro.avif' %>" alt="Perfil" class="profile-pic maria" style="width: 130px; height: 130px; border-radius: 50%; object-fit: cover;">
                   <section class="profile-info">
                     <h2><%= autenticado && autenticado.nome ? autenticado.nome : 'Vendedor' %></h2>
                   </section>
