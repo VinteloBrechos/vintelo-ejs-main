@@ -591,6 +591,12 @@ body {
   }
 }
 
+@media (max-width: 991px) {
+  .filtro {
+    display: none !important;
+  }
+}
+
 .filtro details {
   margin-bottom: 20px;
 }

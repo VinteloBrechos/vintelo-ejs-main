@@ -86,7 +86,7 @@
         <% } %>
         
         <!-- Layout com Sidebar (Desktop) -->
-        <section class="container oculto-mobile">
+        <section class="container">
             <aside class="filtro">
                 <details open>
                     <summary>Categorias</summary>
@@ -169,20 +169,7 @@
         <!-- Layout Mobile -->
         <section class="oculto-desktop">
             <section class="product-grid">
-                <% if (typeof favoritos !== 'undefined' && favoritos && favoritos.length > 0) { %>
-                    <% favoritos.forEach(function(favorito) { %>
-                        <article class="product-card">
-                            <a href="/produto/<%= favorito.ID_PRODUTO %>">
-                                <img src="<%= favorito.IMG_PRODUTO_1 || 'imagens/conjunto.png' %>" alt="<%= favorito.NOME_PRODUTO %>">
-                                <h2><%= favorito.NOME_PRODUTO %></h2>
-                            </a>
-                            <p class="price">R$<%= favorito.PRECO_PRODUTO %></p>
-                            <p class="descricao">ou em 2x de R$<%= (favorito.PRECO_PRODUTO / 2).toFixed(2) %></p>
-                            <button class="favorite favorited" onclick="toggleFavorite(this, <%= favorito.ID_PRODUTO %>)"><img src="imagens/coração de fav2.png"></button>
-                            <button class="cart" onclick="addToCart(1)"><img src="imagens/sacola.png" class="img-sacola"></button>
-                        </article>
-                    <% }); %>
-                <% } %>
+                <!-- Produtos já renderizados na seção desktop -->
             </section>
         </section>
    </main>

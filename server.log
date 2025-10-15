@@ -1,0 +1,346 @@
+[dotenv@17.2.3] injecting env (11) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Caminho do diretório de upload: /workspaces/vintelo/app/public/imagem/produtos/
+Diretório já existe: /workspaces/vintelo/app/public/imagem/produtos/
+teste
+Servidor rodando em http://localhost:3030
+Diretório de upload verificado: ./app/public/imagem/perfil/
+Nova conexão estabelecida como id 295403
+Nova conexão estabelecida como id 295403
+Conectado ao SGBD!
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
+}
+Dados de login recebidos: { email_usu: 'maria.lourdes@gmail.com', senha_usu: 'Maria.28' }
+Buscando usuário com: maria.lourdes@gmail.com
+Buscando usuário com: maria.lourdes@gmail.com
+Resultados da consulta: [
+  {
+    ID_USUARIO: 9,
+    USER_USUARIO: 'Maria',
+    NOME_USUARIO: 'Maria de Lourdes',
+    CELULAR_USUARIO: '11924135587',
+    EMAIL_USUARIO: 'maria.lourdes@gmail.com',
+    LOGRADOURO_USUARIO: 'Rua Cafelândia',
+    NUMERO_USUARIO: '269',
+    COMPLEMENTO_USUARIO: null,
+    BAIRRO_USUARIO: 'Vila Engenho Novo',
+    CIDADE_USUARIO: 'Barueri',
+    UF_USUARIO: 'SP',
+    CEP_USUARIO: '06416150',
+    IMG_URL: null,
+    TIPO_USUARIO: 'c',
+    STATUS_USUARIO: 'a',
+    DESCRICAO_USUARIO: null,
+    SENHA_USUARIO: '$2b$12$.lHSLCuk2oBhW/y2jCG20ujyWM.PLL4ZohPRZRXTRRbID3/0mDAu2'
+  }
+]
+Resultados da consulta: [
+  {
+    ID_USUARIO: 9,
+    USER_USUARIO: 'Maria',
+    NOME_USUARIO: 'Maria de Lourdes',
+    CELULAR_USUARIO: '11924135587',
+    EMAIL_USUARIO: 'maria.lourdes@gmail.com',
+    LOGRADOURO_USUARIO: 'Rua Cafelândia',
+    NUMERO_USUARIO: '269',
+    COMPLEMENTO_USUARIO: null,
+    BAIRRO_USUARIO: 'Vila Engenho Novo',
+    CIDADE_USUARIO: 'Barueri',
+    UF_USUARIO: 'SP',
+    CEP_USUARIO: '06416150',
+    IMG_URL: null,
+    TIPO_USUARIO: 'c',
+    STATUS_USUARIO: 'a',
+    DESCRICAO_USUARIO: null,
+    SENHA_USUARIO: '$2b$12$.lHSLCuk2oBhW/y2jCG20ujyWM.PLL4ZohPRZRXTRRbID3/0mDAu2'
+  }
+]
+Senha do banco: $2b$12$.lHSLCuk2oBhW/y2jCG20ujyWM.PLL4ZohPRZRXTRRbID3/0mDAu2
+Senha informada: Maria.28
+Comparação bcrypt: true
+Autenticação bem-sucedida
+Sessão criada: {
+  autenticado: 'Maria de Lourdes',
+  id: 9,
+  tipo: 'c',
+  nome: 'Maria de Lourdes',
+  email: 'maria.lourdes@gmail.com'
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com'
+  }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+Produto encontrado: {
+  ID_PRODUTO: 30,
+  ID_USUARIO: 8,
+  NOME_PRODUTO: 'Conjunto',
+  PRECO: '45.00',
+  TIPO_PRODUTO: 'blusas',
+  TAMANHO_PRODUTO: 'PP',
+  COR_PRODUTO: 'Branco e Azul',
+  ESTILO_PRODUTO: 'Casual',
+  ESTAMPA_PRODUTO: 'Babado',
+  DETALHES_PRODUTO: 'Conjunto De Short e Regatinha De Babado',
+  CONDICAO_PRODUTO: 'usado',
+  STATUS_PRODUTO: 'd',
+  QUANTIDADE_ESTOQUE: 1,
+  OUTROS: null,
+  DATA_CADASTRO: 2025-10-15T12:49:12.000Z,
+  VENDEDOR: 'Mariana de Sousa Barbosa'
+}
+Imagens encontradas: [ { URL_IMG: 'imagem/produtos/produto-1760532550090-17028117.jpeg' } ]
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+=== FINALIZANDO COMPRA - BUSCANDO PRODUTO ===
+Produto ID recebido: 30
+Produtos encontrados: 1
+Dados do produto: {
+  "ID_PRODUTO": 30,
+  "NOME_PRODUTO": "Conjunto",
+  "PRECO": "45.00",
+  "DETALHES_PRODUTO": "Conjunto De Short e Regatinha De Babado",
+  "TAMANHO_PRODUTO": "PP",
+  "COR_PRODUTO": "Branco e Azul",
+  "ESTILO_PRODUTO": "Casual",
+  "ESTAMPA_PRODUTO": "Babado",
+  "TIPO_PRODUTO": "blusas",
+  "CONDICAO_PRODUTO": "usado",
+  "VENDEDOR": "Mariana de Sousa Barbosa"
+}
+Produto mapeado para template: {
+  "produto_id": 30,
+  "nome": "Conjunto",
+  "preco": 45,
+  "quantidade": 1,
+  "imagem": "/imagem/produtos/produto-1760532550090-17028117.jpeg",
+  "cor": "Branco e Azul",
+  "estilo": "Casual",
+  "estampa": "Babado",
+  "tamanho": "PP",
+  "descricao": "Conjunto De Short e Regatinha De Babado",
+  "categoria": "blusas",
+  "condicao": "usado",
+  "vendedor": "Mariana de Sousa Barbosa"
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+=== FINALIZANDO PAGAMENTO ===
+Parâmetros recebidos: { produtoId: '30', subtotalParam: '45.00' }
+Valores calculados: { subtotal: '45.00', frete: '0.00', total: '45.00' }
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+Sessão atual: Session {
+  cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
+  autenticado: {
+    autenticado: 'Maria de Lourdes',
+    id: 9,
+    tipo: 'c',
+    nome: 'Maria de Lourdes',
+    email: 'maria.lourdes@gmail.com',
+    imagem: null,
+    user_usuario: 'Maria',
+    tipo_usuario: 'c'
+  }
+}
+Dados recebidos: { valor: 60.9, descricao: 'Compra Vintélo', metodo_pagamento: 'PIX' }
+Access Token configurado: true
+Valor parseado: 60.9
+Base URL: http://localhost:3030
+Preference criada: {
+  "items": [
+    {
+      "title": "Compra Vintélo",
+      "unit_price": 60.9,
+      "quantity": 1
+    }
+  ],
+  "back_urls": {
+    "success": "http://localhost:3030/pagamento-sucesso",
+    "failure": "http://localhost:3030/pagamento-falha",
+    "pending": "http://localhost:3030/pagamento-pendente"
+  },
+  "auto_return": "approved",
+  "external_reference": "vintelo-1760567453605"
+}
+(node:59000) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Erro ao processar pagamento: {
+  message: 'auto_return invalid. back_url.success must be defined',
+  error: 'invalid_auto_return',
+  status: 400,
+  cause: null
+}
+Detalhes do erro: auto_return invalid. back_url.success must be defined
+Stack trace: undefined
