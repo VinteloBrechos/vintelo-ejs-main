@@ -206,12 +206,14 @@
         </footer>
     </section>
 
-    <script src="/js/produto-config.js?id=<%= produto ? produto.ID_PRODUTO : '' %>"></script>
     <script src="/js/navegacao.js"></script>
     <script src="/js/produto.js"></script>
     <script src="/js/busca-global.js"></script>
     <script src="/js/frete-calculator.js"></script>
     <script>
+        // Definir status de autenticação
+        window.isAuthenticated = '<%= autenticado ? "true" : "false" %>';
+        
         function goBack() {
             window.history.back();
         }

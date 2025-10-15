@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Testar Pagamento - Vintélo</title>
+    <style>
+        .container { max-width: 600px; margin: 50px auto; text-align: center; padding: 20px; }
+        .btn { background: #007bff; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; margin: 10px; }
+        .btn.success { background: #28a745; }
+        .btn.danger { background: #dc3545; }
+        .btn.warning { background: #ffc107; color: #000; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Simulador de Retorno do Pagamento</h2>
+        <p>Use os botões abaixo para simular diferentes resultados de pagamento:</p>
+        
+        <button class="btn success" onclick="simularPagamento('sucesso')">Pagamento Aprovado</button>
+        <button class="btn danger" onclick="simularPagamento('falha')">Pagamento Rejeitado</button>
+        <button class="btn warning" onclick="simularPagamento('pendente')">Pagamento Pendente</button>
+        
+        <br><br>
+        <button class="btn" onclick="window.location.href='/'">Voltar ao Site</button>
+    </div>
+
+    <script>
+        function simularPagamento(tipo) {
+            const paymentId = 'TEST_' + Date.now();
+            const externalRef = 'vintelo-' + Date.now();
+            
+            let url;
+            switch(tipo) {
+                case 'sucesso':
+                    url = `/pagamento-sucesso?payment_id=${paymentId}&status=approved&external_reference=${externalRef}`;
+                    break;
+                case 'falha':
+                    url = `/pagamento-falha?payment_id=${paymentId}&status=rejected&external_reference=${externalRef}`;
+                    break;
+                case 'pendente':
+                    url = `/pagamento-pendente?payment_id=${paymentId}&status=pending&external_reference=${externalRef}`;
+                    break;
+            }
+            
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

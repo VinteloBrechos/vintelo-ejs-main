@@ -10,9 +10,37 @@
     <link rel="icon" href="/imagens/brilhoescuro.png" type="image/x-icon">
 </head>
 <body>
-    <%- include('../partials/header') %>
+    <section class="oculto-mobile">
+        <section class="top-bar">
+            <p>10% OFF na primeira compra</p>
+        </section>
+        <header>
+            <section class="main-header">
+                <a href="/homecomprador">
+                <img src="/imagens/logo.png" class="img-logo">
+                </a>
+                <nav>
+                    <a href="/categorias">Vestidos</a>
+                    <a href="/categorias">Saias</a>
+                    <a href="/categorias">Blusas</a>
+                    <a href="/categorias">Calças</a>
+                    <a href="/categorias">Outros</a>
+                </nav>
+                <section class="search-profile">
+                    <form>
+                        <input type="text" placeholder="Buscar...">
+                    </form>
+                    <ul>
+                        <li><a href="/sacola1"><img src="/imagens/icone saco.png" class="img-tamanho"></a></li>
+                        <li><a href="<%= autenticado ? '/perfilcliente' : '/cadastro' %>"><img src="<%= autenticado && autenticado.imagem ? '/' + autenticado.imagem : '/imagens/imagem sem cadastro.avif' %>" class="maria"></a></li>
+                        <li><a href="/favoritos"><img src="/imagens/icone coraçao.png" class="img-tamanho"></a></li>
+                    </ul>
+                </section>
+            </section>
+        </header>
+    </section>
     
-    <header class="mobile-header">
+    <header class="mobile-header oculto-desktop">
         <nav class="grid">
             <a href="javascript:void(0)" id="goBackBtn">
                 <img src="/imagens/seta.png" alt="Voltar">
@@ -59,8 +87,13 @@
             </form>
         </section>
         <% } else { %>
-        <section class="add-review">
-            <p>Faça <a href="/entrar">login</a> para avaliar este brechó.</p>
+        <section class="add-review login-prompt">
+            <h2>Avalie este brechó</h2>
+            <p>Compartilhe sua experiência e ajude outros compradores!</p>
+            <div class="auth-buttons">
+                <a href="/entrar" class="login-btn">Entrar</a>
+                <a href="/cadastro" class="signup-btn">Cadastrar</a>
+            </div>
         </section>
         <% } %>
 
@@ -90,7 +123,20 @@
         </section>
     </main>
     
-    <%- include('../partials/footer') %>
+    <section class="oculto-mobile">
+        <footer class="footer">
+            <img src="/imagens/logo2.jpeg" alt="Imagem do Rodapé" class="footer-image">
+            <section class="social-media">
+                <p class="p-footer">Siga nossas redes sociais</p>
+                <ul class="social-links">
+                    <li><a href="https://facebook.com" target="_blank" class="social-link"><img src="/imagens/Facebook.png" alt="Facebook"></a></li>
+                    <li><a href="https://twitter.com" target="_blank" class="social-link"><img src="/imagens/Pinterest.png" alt="Pinterest"></a></li>
+                    <li><a href="https://www.instagram.com/vintelobrechos" target="_blank" class="social-link"><img src="/imagens/Instagram.png" alt="Instagram"></a></li>
+                </ul>
+            </section>
+            <p class="copyright">©2024 Vintélo. Todos os direitos reservados.</p>
+        </footer>
+    </section>
     
     <script src="/js/perfil-autenticado.js"></script>
     <script src="/js/navegacao.js"></script>

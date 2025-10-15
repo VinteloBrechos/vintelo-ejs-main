@@ -1,0 +1,53 @@
+/* Estilos para seção de descontos */
+.discount-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #722F37;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.product-card {
+    position: relative;
+}
+
+.price-original {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 12px;
+    margin: 2px 0;
+}
+
+.price {
+    color: #722F37;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 2px 0;
+}
+
+/* Animação para produtos com desconto */
+.product-card:hover .discount-tag {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .discount-tag {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+    
+    .price-original {
+        font-size: 11px;
+    }
+    
+    .price {
+        font-size: 14px;
+    }
+}

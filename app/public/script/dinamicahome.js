@@ -1,4 +1,4 @@
-function showSection(section) {
+async function showSection(section) {
     const productGrid = document.querySelector('.product-grid');
     const gridTitle = document.querySelector('.grid-produtos h3');
     
@@ -19,6 +19,12 @@ function showSection(section) {
     };
     
     gridTitle.textContent = titles[section] || section.charAt(0).toUpperCase() + section.slice(1);
+    
+    // Se for seção de descontos, carregar produtos do banco
+    if (section === 'descontos') {
+        await loadDiscountProducts();
+        return;
+    }
     
     const content = {
         novidades: `
@@ -119,72 +125,7 @@ function showSection(section) {
                 <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
             </article>
         `,
-        descontos: `
-            <article class="product-card">
-                <span class="discount-tag">14% OFF</span>
-                <a href="/produto2"><img src="imagens/vestido marrom.png" alt="Vestido marrom com decote"></a>
-                <h2>Vestido Marrom Com Decote</h2>
-                <p class="price">R$49,99</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <span class="discount-tag">14% OFF</span>
-                <a href="/produto3"><img src="imagens/vestido com botoes.png" alt="Vestido com botao"></a>
-                <h2>Vestido Longo Com Botoes</h2>
-                <p class="price">R$39,99</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <span class="discount-tag">14% OFF</span>
-                <a href="/produto4"><img src="imagens/saia cargo.png" alt="Saia cargo"></a>
-                <h2>Saia Cargo Jeans</h2>
-                <p class="price">R$29,99</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <span class="discount-tag">14% OFF</span>
-                <a href="/produto1"><img src="imagens/saia longa.png" alt="saia longa"></a>
-                <h2>Saia Longa Jeans</h2>
-                <p class="price">R$19,99</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <span class="discount-tag">14% OFF</span>
-                <a href="/produto2"><img src="imagens/vestido branco.png" alt="Vestido branco com decote"></a>
-                <h2>Vestido branco com decote</h2>
-                <p class="price">R$49,99</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <span class="discount-tag">14% OFF</span>
-                <a href="/produto3"><img src="imagens/vestido roxo.png" alt="Vestido roxo de manga com decote"></a>
-                <h2>Vestido roxo de manga com decote</h2>
-                <p class="price">R$39,99</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <span class="discount-tag">14% OFF</span>
-                <a href="/produto4"><img src="imagens/conjunto de blusa rosa.png" alt="Conjunto rosa de lã"></a>
-                <h2>Conjunto rosa de lã</h2>
-                <p class="price">R$29,99</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-            <article class="product-card">
-                <span class="discount-tag">14% OFF</span>
-                <a href="/produto1"><img src="imagens/regata branca.png" alt="Regata branca"></a>
-                <h2>Regata branca</h2>
-                <p class="price">R$19,99</p>
-                <button class="favorite"><img src="imagens/coraçao de fav2.png"></button>
-                <button class="cart"><img src="imagens/sacola.png" class="img-sacola"></button>
-            </article>
-        `,
+        descontos: '', // Será carregado dinamicamente
         brechos: `
             <li class="profile-item">
                 <img src="imagens/brecho1.png" alt="Mayte" class="profile-image">
@@ -336,4 +277,54 @@ function showSection(section) {
             link.classList.add('active');
         }
     });
+}
+
+// Função para carregar produtos com desconto do banco de dados
+async function loadDiscountProducts() {
+    const productGrid = document.querySelector('.product-grid');
+    
+    try {
+        productGrid.style.opacity = '0.5';
+        productGrid.innerHTML = '<p>Carregando produtos com desconto...</p>';
+        
+        const response = await fetch('/api/produtos-desconto');
+        const produtos = await response.json();
+        
+        if (produtos && produtos.length > 0) {
+            const produtosHtml = produtos.map(produto => {
+                const precoOriginal = parseFloat(produto.PRECO);
+                const precoComDesconto = (precoOriginal * 0.9).toFixed(2);
+                const imagemUrl = produto.URL_IMG ? '/' + produto.URL_IMG : '/imagens/produto-default.png';
+                
+                return `
+                    <article class="product-card">
+                        <span class="discount-tag">10% OFF</span>
+                        <a href="/produto/${produto.ID_PRODUTO}"><img src="${imagemUrl}" alt="${produto.NOME_PRODUTO}"></a>
+                        <h2>${produto.NOME_PRODUTO}</h2>
+                        <p class="price-original">De: R$ ${precoOriginal.toFixed(2).replace('.', ',')}</p>
+                        <p class="price">Por: R$ ${precoComDesconto.replace('.', ',')}</p>
+                        <p class="Descrição">ou em 2x de R$ ${(parseFloat(precoComDesconto) / 2).toFixed(2).replace('.', ',')}</p>
+                        <button class="favorite" onclick="toggleFavorite(this, ${produto.ID_PRODUTO})"><img src="imagens/coraçao de fav2.png"></button>
+                        <button class="cart" onclick="addToCart(${produto.ID_PRODUTO})"><img src="imagens/sacola.png" class="img-sacola"></button>
+                    </article>
+                `;
+            }).join('');
+            
+            productGrid.innerHTML = produtosHtml;
+        } else {
+            productGrid.innerHTML = '<p>Nenhum produto com desconto disponível no momento.</p>';
+        }
+        
+        productGrid.style.opacity = '1';
+        
+        productGrid.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+        
+    } catch (error) {
+        console.error('Erro ao carregar produtos com desconto:', error);
+        productGrid.innerHTML = '<p>Erro ao carregar produtos. Tente novamente.</p>';
+        productGrid.style.opacity = '1';
+    }
 }
