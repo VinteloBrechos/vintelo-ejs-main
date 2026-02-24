@@ -1117,3 +1117,96 @@ input[type="range"]::-webkit-slider-thumb {
 .confirm-btn:hover {
     transform: translateY(-1px);
 }
+
+/* Mensagem quando não há produtos */
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-size: 16px;
+}
+
+.no-products a {
+    color: #7D2838;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.no-products a:hover {
+    text-decoration: underline;
+}
+
+/* Melhorias para responsividade do modal */
+@media (max-width: 480px) {
+    .modal {
+        padding: 10px;
+    }
+    
+    .modal-content {
+        padding: 20px 15px;
+        border-radius: 10px;
+    }
+    
+    .modal-content h2 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px;
+        font-size: 16px; /* Evita zoom no iOS */
+    }
+}
+
+/* Animações suaves para os botões de ação */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.product-actions button:active {
+    animation: pulse 0.2s ease;
+}
+
+/* Melhor visibilidade dos botões em produtos com fundo claro */
+.product-card:hover .product-actions {
+    opacity: 1;
+}
+
+.product-actions {
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+/* Estilo para loading/carregamento */
+.loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #7D2838;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

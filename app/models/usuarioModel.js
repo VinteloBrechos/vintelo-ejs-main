@@ -17,10 +17,11 @@ const usuarioModel = {
     },
     findUserEmail: async (camposForm) => {
         try {
-            console.log('Buscando usuário com:', camposForm.user_usuario);
+            const email = camposForm.user_usuario || camposForm.email_usu;
+            console.log('Buscando usuário com email:', email);
             const [resultados] = await pool.query (
-                "SELECT * FROM USUARIOS WHERE (USER_USUARIO = ? OR EMAIL_USUARIO = ?) AND STATUS_USUARIO = 'a'", 
-                [camposForm.user_usuario, camposForm.user_usuario]
+                "SELECT * FROM USUARIOS WHERE EMAIL_USUARIO = ? AND STATUS_USUARIO = 'a'", 
+                [email]
             )
             console.log('Resultados da consulta:', resultados);
             return resultados;

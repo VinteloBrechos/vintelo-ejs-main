@@ -35,7 +35,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     showSection('dados-pessoais');
+    
+    // Verificar mensagens na URL
+    checkUrlMessages();
 });
+
+// Função para verificar mensagens de sucesso/erro na URL
+function checkUrlMessages() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sucesso = urlParams.get('sucesso');
+    const erro = urlParams.get('erro');
+    
+    if (sucesso) {
+        showNotification(decodeURIComponent(sucesso), 'success');
+        // Limpar URL
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+    } else if (erro) {
+        showNotification(decodeURIComponent(erro), 'error');
+        // Limpar URL
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+    }
+}
 
 document.getElementById('cpf').addEventListener('input', function(e) {
     let value = e.target.value.replace(/\D/g, '');
@@ -103,10 +125,13 @@ document.getElementById('nova-senha').addEventListener('input', validatePassword
 document.getElementById('confirmar-senha').addEventListener('input', validatePasswords);
 
 document.getElementById('profileForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
+    console.log('=== ENVIANDO FORMULÁRIO ===');
+    
+    console.log('Enviando formulário...');
+    
     if (!validatePasswords()) {
-        alert('As senhas não coincidem!');
+        e.preventDefault();
+        showNotification('As senhas não coincidem!', 'error');
         return;
     }
     
@@ -116,47 +141,63 @@ document.getElementById('profileForm').addEventListener('submit', function(e) {
     
     // Validar CNPJ
     if (cnpj && !validarCNPJ(cnpj)) {
-        alert('CNPJ inválido!');
+        e.preventDefault();
+        showNotification('CNPJ inválido!', 'error');
         return;
     }
     
     // Validar Razão Social (mínimo 5 caracteres)
     if (razaoSocial && razaoSocial.length < 5) {
-        alert('Razão Social deve ter pelo menos 5 caracteres!');
+        e.preventDefault();
+        showNotification('Razão Social deve ter pelo menos 5 caracteres!', 'error');
         return;
     }
     
     // Validar Nome Fantasia (mínimo 2 caracteres)
     if (nomeFantasia && nomeFantasia.length < 2) {
-        alert('Nome Fantasia deve ter pelo menos 2 caracteres!');
+        e.preventDefault();
+        showNotification('Nome Fantasia deve ter pelo menos 2 caracteres!', 'error');
         return;
     }
     
     // Validar CEP
     const cep = document.getElementById('cep').value;
     if (cep && !/^\d{5}-?\d{3}$/.test(cep)) {
-        alert('CEP inválido!');
+        e.preventDefault();
+        showNotification('CEP inválido!', 'error');
+        return;
+    }
+    
+    // Validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailUsu)) {
+        e.preventDefault();
+        showNotification('Email inválido!', 'error');
         return;
     }
 
     const submitBtn = document.querySelector('.btn-primary');
     const originalText = submitBtn.textContent;
-    
     submitBtn.textContent = 'Salvando...';
     submitBtn.disabled = true;
     
+    console.log('Formulário validado, enviando...');
+    
+    // Adicionar timeout para reabilitar botão em caso de erro
     setTimeout(() => {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        
-        showNotification('Informações salvas com sucesso!', 'success');
-    }, 2000);
+        if (submitBtn.disabled) {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    }, 10000); // 10 segundos
+    
+    // Permitir que o formulário seja enviado normalmente
 });
 
 function resetForm() {
-    if (confirm('Tem certeza que deseja cancelar as alterações?')) {
-        document.getElementById('profileForm').reset();
-        showNotification('Alterações canceladas', 'info');
+    if (confirm('Tem certeza que deseja cancelar as alterações? Todos os dados não salvos serão perdidos.')) {
+        // Recarregar a página para restaurar os valores originais
+        window.location.reload();
     }
 }
 
@@ -311,3 +352,35 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Função de debug para testar o salvamento
+function testarSalvamento() {
+    console.log('=== TESTE DE SALVAMENTO ===');
+    const form = document.getElementById('profileForm');
+    const formData = new FormData(form);
+    
+    console.log('Dados do formulário:');
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+    
+    showNotification('Teste de salvamento executado - verifique o console', 'info');
+}
+
+// Adicionar botão de teste em modo de desenvolvimento
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    setTimeout(() => {
+        const testBtn = document.createElement('button');
+        testBtn.textContent = 'Testar Salvamento';
+        testBtn.type = 'button';
+        testBtn.className = 'btn-secondary';
+        testBtn.onclick = testarSalvamento;
+        testBtn.style.position = 'fixed';
+        testBtn.style.bottom = '20px';
+        testBtn.style.left = '20px';
+        testBtn.style.zIndex = '9999';
+        testBtn.style.fontSize = '12px';
+        testBtn.style.padding = '8px 12px';
+        document.body.appendChild(testBtn);
+    }, 1000);
+}

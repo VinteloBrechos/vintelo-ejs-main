@@ -72,12 +72,14 @@ const upload = multer({
 async function ensureUploadDirectory() {
     const uploadDir = './app/public/imagem/perfil/';
     try {
-        await mkdir(uploadDir, { recursive: true });
-        console.log('Diretório de upload verificado:', uploadDir);
-    } catch (error) {
-        if (error.code !== 'EEXIST') {
-            console.log('Erro ao criar diretório de upload:', error.message);
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+            console.log('Diretório de upload criado:', uploadDir);
+        } else {
+            console.log('Diretório de upload já existe:', uploadDir);
         }
+    } catch (error) {
+        console.log('Erro ao verificar/criar diretório de upload:', error.message);
     }
 }
 
@@ -145,10 +147,22 @@ router.get("/", carregarDadosUsuario, async function (req, res) {
   
   try {
     const { bannerModel } = require('../models/bannerModel');
-    const { produtoModel } = require('../models/produtoModel');
     
     banners = await bannerModel.findByPosition('Home') || [];
-    produtos = await produtoModel.findRecent(16) || [];
+    
+    // Buscar produtos únicos
+    const [produtosResult] = await pool.query(`
+      SELECT p.ID_PRODUTO, p.NOME_PRODUTO, p.PRECO, p.TIPO_PRODUTO,
+             p.TAMANHO_PRODUTO, p.COR_PRODUTO, p.CONDICAO_PRODUTO,
+             (SELECT URL_IMG FROM IMG_PRODUTOS WHERE ID_PRODUTO = p.ID_PRODUTO LIMIT 1) as URL_IMG,
+             u.NOME_USUARIO as VENDEDOR
+      FROM PRODUTOS p 
+      LEFT JOIN USUARIOS u ON p.ID_USUARIO = u.ID_USUARIO
+      WHERE p.STATUS_PRODUTO = 'd'
+      ORDER BY p.DATA_CADASTRO DESC
+      LIMIT 16
+    `);
+    produtos = produtosResult || [];
     
     // Buscar brechós reais
     const [brechosResult] = await pool.query(`
@@ -577,10 +591,22 @@ router.get('/homecomprador', carregarDadosUsuario, async function(req, res){
     
     try {
         const { bannerModel } = require('../models/bannerModel');
-        const { produtoModel } = require('../models/produtoModel');
         
         banners = await bannerModel.findByPosition('Home') || [];
-        produtos = await produtoModel.findRecent(16) || [];
+        
+        // Buscar produtos únicos
+        const [produtosResult] = await pool.query(`
+            SELECT p.ID_PRODUTO, p.NOME_PRODUTO, p.PRECO, p.TIPO_PRODUTO,
+                   p.TAMANHO_PRODUTO, p.COR_PRODUTO, p.CONDICAO_PRODUTO,
+                   (SELECT URL_IMG FROM IMG_PRODUTOS WHERE ID_PRODUTO = p.ID_PRODUTO LIMIT 1) as URL_IMG,
+                   u.NOME_USUARIO as VENDEDOR
+            FROM PRODUTOS p 
+            LEFT JOIN USUARIOS u ON p.ID_USUARIO = u.ID_USUARIO
+            WHERE p.STATUS_PRODUTO = 'd'
+            ORDER BY p.DATA_CADASTRO DESC
+            LIMIT 16
+        `);
+        produtos = produtosResult || [];
         
         // Buscar brechós reais
         const [brechosResult] = await pool.query(`
@@ -613,10 +639,22 @@ router.get('/homevendedor', carregarDadosUsuario, async function(req, res){
     
     try {
         const { bannerModel } = require('../models/bannerModel');
-        const { produtoModel } = require('../models/produtoModel');
         
         banners = await bannerModel.findByPosition('Home') || [];
-        produtos = await produtoModel.findRecent(16) || [];
+        
+        // Buscar produtos únicos
+        const [produtosResult] = await pool.query(`
+            SELECT p.ID_PRODUTO, p.NOME_PRODUTO, p.PRECO, p.TIPO_PRODUTO,
+                   p.TAMANHO_PRODUTO, p.COR_PRODUTO, p.CONDICAO_PRODUTO,
+                   (SELECT URL_IMG FROM IMG_PRODUTOS WHERE ID_PRODUTO = p.ID_PRODUTO LIMIT 1) as URL_IMG,
+                   u.NOME_USUARIO as VENDEDOR
+            FROM PRODUTOS p 
+            LEFT JOIN USUARIOS u ON p.ID_USUARIO = u.ID_USUARIO
+            WHERE p.STATUS_PRODUTO = 'd'
+            ORDER BY p.DATA_CADASTRO DESC
+            LIMIT 16
+        `);
+        produtos = produtosResult || [];
         
         // Buscar brechós reais
         const [brechosResult] = await pool.query(`
@@ -2587,57 +2625,123 @@ router.get('/menuvendedor', carregarDadosUsuario, (req, res) => {
 
 router.post('/informacao', verificarUsuAutenticado, async (req, res) => {
     try {
-        const { nome_usu, email_usu, fone_usu, cnpj, razao_social, nome_fantasia, data_nasc, cep, numero, logradouro, bairro, cidade, estado } = req.body;
+        console.log('=== SALVANDO INFORMAÇÕES ===');
+        console.log('Body completo:', req.body);
         
-        if (req.session && req.session.autenticado && req.session.autenticado.id) {
-            const dadosUsuario = {
-                NOME_USUARIO: nome_usu,
-                EMAIL_USUARIO: email_usu,
-                CELULAR_USUARIO: fone_usu,
-                CEP_USUARIO: cep ? cep.replace(/\D/g, '') : '',
-                LOGRADOURO_USUARIO: logradouro,
-                NUMERO_USUARIO: numero,
-                BAIRRO_USUARIO: bairro,
-                CIDADE_USUARIO: cidade,
-                UF_USUARIO: estado
-            };
-            
-            await usuarioModel.update(dadosUsuario, req.session.autenticado.id);
-            
-            if (cnpj || razao_social || nome_fantasia) {
-                const [brechos] = await pool.query(
-                    'SELECT * FROM BRECHOS WHERE ID_USUARIO = ?',
-                    [req.session.autenticado.id]
-                );
-                
+        const { 
+            nome_usu, email_usu, fone_usu, cnpj, razao_social, nome_fantasia,
+            data_nasc, genero, cep, numero, logradouro, bairro, cidade, estado, complemento,
+            senha_usu, categoria_favorita, tamanho_preferido, faixa_preco
+        } = req.body;
+        
+        const userId = req.session.autenticado.id;
+        
+        console.log('Dados recebidos:', { nome_usu, email_usu, fone_usu, userId });
+        
+        // Validar dados obrigatórios
+        if (!nome_usu || !email_usu) {
+            console.log('Dados obrigatórios não fornecidos');
+            return res.redirect('/informacao?erro=Nome e email são obrigatórios');
+        }
+        
+        // Preparar dados do usuário para atualização
+        const dadosUsuario = {
+            NOME_USUARIO: nome_usu.trim(),
+            EMAIL_USUARIO: email_usu.trim()
+        };
+        
+        // Adicionar campos opcionais se fornecidos
+        if (fone_usu && fone_usu.trim()) {
+            dadosUsuario.CELULAR_USUARIO = fone_usu.trim();
+        }
+        
+        if (data_nasc && data_nasc.trim()) {
+            dadosUsuario.DATA_NASC = data_nasc;
+        }
+        
+        if (cep && cep.trim()) {
+            dadosUsuario.CEP_USUARIO = cep.replace(/\D/g, '');
+        }
+        
+        if (logradouro && logradouro.trim()) {
+            dadosUsuario.LOGRADOURO_USUARIO = logradouro.trim();
+        }
+        
+        if (numero && numero.trim()) {
+            dadosUsuario.NUMERO_USUARIO = numero.trim();
+        }
+        
+        if (bairro && bairro.trim()) {
+            dadosUsuario.BAIRRO_USUARIO = bairro.trim();
+        }
+        
+        if (cidade && cidade.trim()) {
+            dadosUsuario.CIDADE_USUARIO = cidade.trim();
+        }
+        
+        if (estado && estado.trim()) {
+            dadosUsuario.UF_USUARIO = estado.trim();
+        }
+        
+        console.log('Atualizando usuário com dados:', dadosUsuario);
+        const resultado = await usuarioModel.update(dadosUsuario, userId);
+        console.log('Resultado da atualização:', resultado);
+        
+        // Atualizar sessão com novos dados
+        req.session.autenticado.nome = nome_usu.trim();
+        req.session.autenticado.email = email_usu.trim();
+        
+        // Processar dados específicos do brechó se for vendedor
+        if (req.session.autenticado.tipo === 'b' && (cnpj || razao_social || nome_fantasia)) {
+            try {
                 const dadosBrecho = {};
-                if (cnpj) dadosBrecho.CNPJ_BRECHO = cnpj.replace(/\D/g, '');
-                if (razao_social) dadosBrecho.RAZAO_SOCIAL = razao_social;
-                if (nome_fantasia) dadosBrecho.NOME_FANTASIA = nome_fantasia;
                 
-                if (brechos.length > 0) {
-                    await pool.query(
-                        'UPDATE BRECHOS SET ? WHERE ID_USUARIO = ?',
-                        [dadosBrecho, req.session.autenticado.id]
+                if (cnpj && cnpj.trim()) {
+                    dadosBrecho.CNPJ_BRECHO = cnpj.replace(/\D/g, '');
+                }
+                
+                if (razao_social && razao_social.trim()) {
+                    dadosBrecho.RAZAO_SOCIAL = razao_social.trim();
+                }
+                
+                if (nome_fantasia && nome_fantasia.trim()) {
+                    dadosBrecho.NOME_FANTASIA = nome_fantasia.trim();
+                }
+                
+                if (Object.keys(dadosBrecho).length > 0) {
+                    // Verificar se já existe registro do brechó
+                    const [brechoExiste] = await pool.query(
+                        'SELECT ID_BRECHO FROM BRECHOS WHERE ID_USUARIO = ?',
+                        [userId]
                     );
-                } else {
-                    dadosBrecho.ID_USUARIO = req.session.autenticado.id;
-                    await pool.query('INSERT INTO BRECHOS SET ?', [dadosBrecho]);
+                    
+                    if (brechoExiste.length > 0) {
+                        // Atualizar brechó existente
+                        await pool.query(
+                            'UPDATE BRECHOS SET ? WHERE ID_USUARIO = ?',
+                            [dadosBrecho, userId]
+                        );
+                    } else {
+                        // Criar novo registro de brechó
+                        dadosBrecho.ID_USUARIO = userId;
+                        await pool.query(
+                            'INSERT INTO BRECHOS SET ?',
+                            [dadosBrecho]
+                        );
+                    }
+                    console.log('Dados do brechó atualizados:', dadosBrecho);
                 }
-            }
-            
-            if (data_nasc) {
-                const clienteData = await cliente.findByUserId(req.session.autenticado.id);
-                if (clienteData && clienteData.length > 0) {
-                    await cliente.update({ DATA_NASC: data_nasc }, req.session.autenticado.id);
-                }
+            } catch (brechoError) {
+                console.log('Erro ao atualizar dados do brechó:', brechoError.message);
             }
         }
         
-        res.redirect('/informacao');
+        console.log('Informações salvas com sucesso!');
+        res.redirect('/informacao?sucesso=Alterações salvas com sucesso');
+        
     } catch (error) {
         console.log('Erro ao salvar informações:', error);
-        res.redirect('/informacao');
+        res.redirect('/informacao?erro=Erro ao salvar alterações: ' + error.message);
     }
 });
 router.get('/informacao', carregarDadosUsuario, async (req, res) => {
@@ -2887,94 +2991,92 @@ router.post('/test-upload-debug', upload.single('foto'), async function(req, res
 router.post('/upload-foto-perfil', upload.single('foto'), async function(req, res){
     try {
         console.log('=== UPLOAD FOTO PERFIL ===');
-        console.log('Sessão:', req.session);
-        console.log('Autenticado:', req.session?.autenticado);
-        console.log('Arquivo:', req.file);
+        console.log('Sessão:', req.session?.autenticado ? 'Autenticado' : 'Não autenticado');
+        console.log('Arquivo recebido:', req.file ? 'SIM' : 'NÃO');
         
-        // Verificar autenticação manualmente
+        // Verificar autenticação
         if (!req.session || !req.session.autenticado || !req.session.autenticado.id) {
+            console.log('Erro: Usuário não autenticado');
             return res.json({ success: false, error: 'Usuário não autenticado' });
         }
         
         if (!req.file) {
+            console.log('Erro: Nenhum arquivo enviado');
             return res.json({ success: false, error: 'Nenhum arquivo enviado' });
         }
         
         const userId = req.session.autenticado.id;
         const imagePath = 'imagem/perfil/' + req.file.filename;
         
-        console.log('Arquivo:', {
-            fieldname: req.file.fieldname,
-            originalname: req.file.originalname,
-            encoding: req.file.encoding,
-            mimetype: req.file.mimetype,
-            destination: req.file.destination,
+        console.log('Dados do upload:', {
+            userId: userId,
             filename: req.file.filename,
-            path: req.file.path,
+            imagePath: imagePath,
             size: req.file.size
         });
         
-        console.log('Atualizando usuário ID:', userId, 'com imagem:', imagePath);
+        // Atualizar no banco de dados usando a estrutura existente
+        console.log('Atualizando usuário no banco...');
+        const [result] = await pool.query(
+            'UPDATE USUARIOS SET IMG_URL = ? WHERE ID_USUARIO = ?', 
+            [imagePath, userId]
+        );
         
-        // Implementar retry com timeout para evitar ECONNRESET
-        let attempts = 0;
-        const maxAttempts = 3;
-        let result;
+        console.log('Resultado da atualização:', {
+            affectedRows: result.affectedRows,
+            changedRows: result.changedRows
+        });
         
-        while (attempts < maxAttempts) {
-            try {
-                attempts++;
-                console.log(`Tentativa ${attempts} de atualização no banco...`);
-                
-                // Usar timeout menor e connection específica
-                const connection = await pool.getConnection();
-                try {
-                    await connection.query('SET SESSION wait_timeout = 30');
-                    [result] = await connection.query(
-                        'UPDATE USUARIOS SET IMG_URL = ? WHERE ID_USUARIO = ?', 
-                        [imagePath, userId]
-                    );
-                    connection.release();
-                    break; // Sucesso, sair do loop
-                } catch (connError) {
-                    connection.release();
-                    throw connError;
-                }
-            } catch (dbError) {
-                console.log(`Erro na tentativa ${attempts}:`, dbError.message);
-                
-                if (attempts >= maxAttempts) {
-                    throw dbError;
-                }
-                
-                // Aguardar antes da próxima tentativa
-                await new Promise(resolve => setTimeout(resolve, 1000 * attempts));
-            }
-        }
-        
-        console.log('Resultado da atualização:', result);
-        
-        if (result && result.affectedRows > 0) {
+        if (result.affectedRows > 0) {
+            // Atualizar sessão
             req.session.autenticado.imagem = imagePath;
-            res.json({ success: true, imagePath: imagePath });
+            
+            console.log('✅ Upload realizado com sucesso!');
+            res.json({ 
+                success: true, 
+                imagePath: imagePath,
+                message: 'Foto atualizada com sucesso!'
+            });
         } else {
-            res.json({ success: false, error: 'Falha ao atualizar no banco de dados' });
+            console.log('❌ Nenhuma linha foi afetada no banco');
+            // Remover arquivo se não conseguiu atualizar no banco
+            if (fs.existsSync(req.file.path)) {
+                fs.unlinkSync(req.file.path);
+            }
+            
+            res.json({ 
+                success: false, 
+                error: 'Falha ao atualizar no banco de dados' 
+            });
         }
         
     } catch (error) {
-        console.log('ERRO no upload:', error);
+        console.log('❌ ERRO no upload:', error.message);
         
-        // Tratar erros específicos
-        let errorMessage = error.message;
-        if (error.code === 'ECONNRESET') {
-            errorMessage = 'Conexão com banco perdida. Tente novamente.';
-        } else if (error.code === 'ETIMEDOUT') {
-            errorMessage = 'Timeout na conexão. Tente novamente.';
-        } else if (error.code === 'ER_LOCK_WAIT_TIMEOUT') {
-            errorMessage = 'Banco ocupado. Tente novamente em alguns segundos.';
+        // Remover arquivo em caso de erro
+        if (req.file && fs.existsSync(req.file.path)) {
+            try {
+                fs.unlinkSync(req.file.path);
+                console.log('Arquivo removido após erro');
+            } catch (unlinkError) {
+                console.log('Erro ao remover arquivo:', unlinkError.message);
+            }
         }
         
-        res.json({ success: false, error: errorMessage });
+        // Tratar erros específicos do multer
+        if (error instanceof multer.MulterError) {
+            if (error.code === 'LIMIT_FILE_SIZE') {
+                return res.json({ 
+                    success: false, 
+                    error: 'Arquivo muito grande. Máximo 5MB.' 
+                });
+            }
+        }
+        
+        res.json({ 
+            success: false, 
+            error: error.message || 'Erro interno do servidor' 
+        });
     }
 });
 
@@ -4144,18 +4246,18 @@ router.post('/produtosadm/excluir', verificarUsuAutenticado, async (req, res) =>
         try {
             // Excluir registros relacionados primeiro (ordem importante)
             
-            // 1. Excluir das tabelas de relacionamento
+            // 1. Excluir imagens do produto PRIMEIRO
+            const [imagensResult] = await pool.query('DELETE FROM IMG_PRODUTOS WHERE ID_PRODUTO = ?', [produtoId]);
+            console.log('Imagens removidas:', imagensResult.affectedRows);
+            
+            // 2. Excluir das tabelas de relacionamento
             await pool.query('DELETE FROM FAVORITOS WHERE ID_ITEM = ? AND TIPO_ITEM = "produto"', [produtoId]);
             console.log('Favoritos removidos');
             
             await pool.query('DELETE FROM ITENS_SACOLA WHERE ID_PRODUTO = ?', [produtoId]);
             console.log('Itens da sacola removidos');
             
-            // 2. Excluir imagens do produto
-            const [imagensResult] = await pool.query('DELETE FROM IMG_PRODUTOS WHERE ID_PRODUTO = ?', [produtoId]);
-            console.log('Imagens removidas:', imagensResult.affectedRows);
-            
-            // 3. Excluir o produto
+            // 3. Excluir o produto por último
             const [produtoResult] = await pool.query('DELETE FROM PRODUTOS WHERE ID_PRODUTO = ?', [produtoId]);
             console.log('Produto removido:', produtoResult.affectedRows);
             
@@ -4190,6 +4292,172 @@ router.post('/produtosadm/excluir', verificarUsuAutenticado, async (req, res) =>
         }
         
         res.json({ success: false, message: mensagemErro });
+    }
+});
+
+// Rota para vendedores excluírem seus próprios produtos
+router.post('/produto/excluir', verificarUsuAutenticado, async (req, res) => {
+    try {
+        const { productId } = req.body;
+        const userId = req.session.autenticado.id;
+        
+        console.log('=== EXCLUSÃO DE PRODUTO VENDEDOR ===');
+        console.log('Produto ID:', productId);
+        console.log('Usuário ID:', userId);
+        
+        // Validar ID do produto
+        if (!productId || isNaN(productId)) {
+            console.log('ID do produto inválido:', productId);
+            return res.json({ success: false, message: 'ID do produto inválido' });
+        }
+        
+        // Verificar se o produto existe e pertence ao usuário
+        const [produtoExiste] = await pool.query(
+            'SELECT ID_PRODUTO, NOME_PRODUTO, ID_USUARIO FROM PRODUTOS WHERE ID_PRODUTO = ?', 
+            [productId]
+        );
+        
+        if (produtoExiste.length === 0) {
+            console.log('Produto não encontrado:', productId);
+            return res.json({ success: false, message: 'Produto não encontrado' });
+        }
+        
+        // Verificar se o produto pertence ao usuário logado
+        if (produtoExiste[0].ID_USUARIO !== userId) {
+            console.log('Usuário não é dono do produto');
+            return res.json({ success: false, message: 'Você só pode excluir seus próprios produtos' });
+        }
+        
+        console.log('Excluindo produto:', produtoExiste[0].NOME_PRODUTO);
+        
+        // Iniciar transação para garantir integridade
+        await pool.query('START TRANSACTION');
+        
+        try {
+            // Excluir registros relacionados primeiro (ordem importante)
+            
+            // 1. Excluir imagens do produto PRIMEIRO
+            const [imagensResult] = await pool.query('DELETE FROM IMG_PRODUTOS WHERE ID_PRODUTO = ?', [productId]);
+            console.log('Imagens removidas:', imagensResult.affectedRows);
+            
+            // 2. Excluir das tabelas de relacionamento
+            await pool.query('DELETE FROM FAVORITOS WHERE ID_ITEM = ? AND TIPO_ITEM = "produto"', [productId]);
+            console.log('Favoritos removidos');
+            
+            await pool.query('DELETE FROM ITENS_SACOLA WHERE ID_PRODUTO = ?', [productId]);
+            console.log('Itens da sacola removidos');
+            
+            // 3. Excluir o produto por último
+            const [produtoResult] = await pool.query('DELETE FROM PRODUTOS WHERE ID_PRODUTO = ?', [productId]);
+            console.log('Produto removido:', produtoResult.affectedRows);
+            
+            if (produtoResult.affectedRows === 0) {
+                throw new Error('Falha ao excluir o produto da tabela principal');
+            }
+            
+            // Confirmar transação
+            await pool.query('COMMIT');
+            
+            console.log('Produto excluído com sucesso pelo vendedor!');
+            res.json({ success: true, message: 'Produto excluído com sucesso' });
+            
+        } catch (transactionError) {
+            // Reverter transação em caso de erro
+            await pool.query('ROLLBACK');
+            throw transactionError;
+        }
+        
+    } catch (error) {
+        console.log('Erro detalhado ao excluir produto:', error);
+        
+        // Tratar erros específicos
+        let mensagemErro = 'Erro interno do servidor';
+        
+        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+            mensagemErro = 'Não é possível excluir este produto pois ele possui referências em outras tabelas';
+        } else if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+            mensagemErro = 'Erro de integridade referencial';
+        } else if (error.message.includes('Falha ao excluir')) {
+            mensagemErro = error.message;
+        }
+        
+        res.json({ success: false, message: mensagemErro });
+    }
+});
+
+// Rota para buscar detalhes do produto para edição
+router.get('/produto/detalhes/:id', verificarUsuAutenticado, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.session.autenticado.id;
+        
+        // Verificar se o produto existe e pertence ao usuário
+        const [produto] = await pool.query(
+            'SELECT * FROM PRODUTOS WHERE ID_PRODUTO = ? AND ID_USUARIO = ?', 
+            [id, userId]
+        );
+        
+        if (produto.length === 0) {
+            return res.json({ success: false, message: 'Produto não encontrado ou não pertence a você' });
+        }
+        
+        res.json({ success: true, produto: produto[0] });
+    } catch (error) {
+        console.log('Erro ao buscar detalhes do produto:', error);
+        res.json({ success: false, message: 'Erro interno do servidor' });
+    }
+});
+
+// Rota para editar produto
+router.post('/produto/editar', verificarUsuAutenticado, async (req, res) => {
+    try {
+        const { productId, nome, preco, descricao, tipo, tamanho, cor, condicao } = req.body;
+        const userId = req.session.autenticado.id;
+        
+        console.log('=== EDIÇÃO DE PRODUTO ===');
+        console.log('Dados recebidos:', { productId, nome, preco, tipo });
+        
+        // Validações básicas
+        if (!productId || !nome || !preco) {
+            return res.json({ success: false, message: 'Campos obrigatórios não preenchidos' });
+        }
+        
+        // Verificar se o produto existe e pertence ao usuário
+        const [produtoExiste] = await pool.query(
+            'SELECT ID_PRODUTO FROM PRODUTOS WHERE ID_PRODUTO = ? AND ID_USUARIO = ?', 
+            [productId, userId]
+        );
+        
+        if (produtoExiste.length === 0) {
+            return res.json({ success: false, message: 'Produto não encontrado ou não pertence a você' });
+        }
+        
+        // Atualizar produto
+        const dadosAtualizacao = {
+            NOME_PRODUTO: nome.trim(),
+            PRECO: parseFloat(preco),
+            DETALHES_PRODUTO: descricao ? descricao.trim() : null,
+            TIPO_PRODUTO: tipo || null,
+            TAMANHO_PRODUTO: tamanho || null,
+            COR_PRODUTO: cor ? cor.trim() : null,
+            CONDICAO_PRODUTO: condicao || null
+        };
+        
+        const [resultado] = await pool.query(
+            'UPDATE PRODUTOS SET ? WHERE ID_PRODUTO = ? AND ID_USUARIO = ?',
+            [dadosAtualizacao, productId, userId]
+        );
+        
+        if (resultado.affectedRows > 0) {
+            console.log('Produto atualizado com sucesso!');
+            res.json({ success: true, message: 'Produto atualizado com sucesso' });
+        } else {
+            res.json({ success: false, message: 'Nenhuma alteração foi feita' });
+        }
+        
+    } catch (error) {
+        console.log('Erro ao editar produto:', error);
+        res.json({ success: false, message: 'Erro interno do servidor' });
     }
 });
 
@@ -5004,16 +5272,14 @@ router.post('/finalizar-pedido-real', verificarUsuAutenticado, async (req, res) 
         const userId = req.session.autenticado.id;
         const { produtos, valorTotal, metodoPagamento } = req.body;
         
-        // Criar pedido real
+
         const [pedido] = await pool.query(`
             INSERT INTO PEDIDOS (ID_USUARIO, DT_PEDIDO, VALOR_TOTAL, STATUS_PEDIDO)
             VALUES (?, NOW(), ?, 'Pendente')
         `, [userId, valorTotal]);
         
-        // Limpar sacola após pedido
         await pool.query('DELETE FROM ITENS_SACOLA WHERE ID_SACOLA IN (SELECT ID_SACOLA FROM SACOLA WHERE ID_USUARIO = ?)', [userId]);
         
-        // Notificar por email
         await emailService.notificarPedido(userId, pedido.insertId);
         
         res.json({ success: true, pedidoId: pedido.insertId });
@@ -5023,7 +5289,6 @@ router.post('/finalizar-pedido-real', verificarUsuAutenticado, async (req, res) 
     }
 });
 
-// Rotas para edição de produtos
 router.get('/produto/detalhes/:id', verificarUsuAutenticado, async (req, res) => {
     try {
         const { id } = req.params;
@@ -5031,7 +5296,6 @@ router.get('/produto/detalhes/:id', verificarUsuAutenticado, async (req, res) =>
         
         console.log('Buscando produto ID:', id, 'para usuário:', userId);
         
-        // Validar se o ID é um número válido
         if (!id || isNaN(id)) {
             return res.json({ success: false, message: 'ID do produto inválido' });
         }
@@ -5061,7 +5325,6 @@ router.post('/produto/editar', verificarUsuAutenticado, async (req, res) => {
         
         console.log('Editando produto:', { productId, nome, preco, tipo, userId });
         
-        // Validar dados de entrada
         if (!productId || isNaN(productId)) {
             return res.json({ success: false, message: 'ID do produto inválido' });
         }
@@ -5078,7 +5341,6 @@ router.post('/produto/editar', verificarUsuAutenticado, async (req, res) => {
             return res.json({ success: false, message: 'Categoria é obrigatória' });
         }
         
-        // Verificar se o produto pertence ao usuário
         const [produto] = await pool.query(
             'SELECT * FROM PRODUTOS WHERE ID_PRODUTO = ? AND ID_USUARIO = ?',
             [parseInt(productId), userId]
@@ -5088,7 +5350,6 @@ router.post('/produto/editar', verificarUsuAutenticado, async (req, res) => {
             return res.json({ success: false, message: 'Produto não encontrado ou sem permissão' });
         }
         
-        // Preparar dados para atualização (limpar valores vazios)
         const dadosAtualizacao = {
             NOME_PRODUTO: nome.trim(),
             PRECO: parseFloat(preco),
@@ -5101,7 +5362,7 @@ router.post('/produto/editar', verificarUsuAutenticado, async (req, res) => {
         
         console.log('Dados para atualização:', dadosAtualizacao);
         
-        // Atualizar produto
+
         const [resultado] = await pool.query(`
             UPDATE PRODUTOS SET 
                 NOME_PRODUTO = ?, 
@@ -5134,7 +5395,6 @@ router.post('/produto/editar', verificarUsuAutenticado, async (req, res) => {
     } catch (error) {
         console.log('Erro detalhado ao editar produto:', error);
         
-        // Tratar erros específicos do MySQL
         if (error.code === 'ER_DATA_TOO_LONG') {
             return res.json({ success: false, message: 'Algum campo contém dados muito longos' });
         }
@@ -5151,35 +5411,38 @@ router.post('/produto/editar', verificarUsuAutenticado, async (req, res) => {
 
 router.post('/produto/excluir', verificarUsuAutenticado, async (req, res) => {
     try {
-        console.log('=== EXCLUIR PRODUTO ===');
-        console.log('Body:', req.body);
-        console.log('Sessão:', req.session.autenticado);
-        
         const { productId } = req.body;
         const userId = req.session.autenticado.id;
-        
-        console.log('ProductId:', productId, 'UserId:', userId);
         
         if (!productId) {
             return res.json({ success: false, message: 'ID do produto é obrigatório' });
         }
         
-        // Excluir produto diretamente
-        console.log('Executando DELETE...');
-        const [resultado] = await pool.query(
-            'DELETE FROM PRODUTOS WHERE ID_PRODUTO = ? AND ID_USUARIO = ?', 
+        const [produto] = await pool.query(
+            'SELECT ID_PRODUTO FROM PRODUTOS WHERE ID_PRODUTO = ? AND ID_USUARIO = ?',
             [productId, userId]
         );
         
-        console.log('Resultado:', resultado);
+        if (produto.length === 0) {
+            return res.json({ success: false, message: 'Produto não encontrado ou sem permissão' });
+        }
+        
+        await pool.query('DELETE FROM IMG_PRODUTOS WHERE ID_PRODUTO = ?', [productId]);
+        await pool.query('DELETE FROM FAVORITOS WHERE ID_ITEM = ? AND TIPO_ITEM = "produto"', [productId]);
+        await pool.query('DELETE FROM ITENS_SACOLA WHERE ID_PRODUTO = ?', [productId]);
+        
+        const [resultado] = await pool.query(
+            'DELETE FROM PRODUTOS WHERE ID_PRODUTO = ? AND ID_USUARIO = ?',
+            [productId, userId]
+        );
         
         if (resultado.affectedRows > 0) {
             res.json({ success: true, message: 'Produto excluído com sucesso!' });
         } else {
-            res.json({ success: false, message: 'Produto não encontrado ou sem permissão' });
+            res.json({ success: false, message: 'Erro ao excluir produto' });
         }
     } catch (error) {
-        console.log('ERRO COMPLETO ao excluir produto:', error);
+        console.log('Erro ao excluir produto:', error);
         res.json({ success: false, message: 'Erro interno: ' + error.message });
     }
 });
@@ -5280,6 +5543,53 @@ router.get('/debug/blog', async (req, res) => {
     } catch (error) {
         console.log('Erro no debug blog:', error.message);
         res.json({ error: error.message, stack: error.stack });
+    }
+});
+
+// Rota para criar avaliação de brechó
+router.post('/avaliacoes/criar', verificarUsuAutenticado, async (req, res) => {
+    try {
+        const { nota, comentario, brechoId } = req.body;
+        const userId = req.session.autenticado.id;
+        
+        if (!nota || !comentario || !brechoId) {
+            return res.json({ success: false, message: 'Todos os campos são obrigatórios' });
+        }
+        
+        if (nota < 1 || nota > 5) {
+            return res.json({ success: false, message: 'Nota deve ser entre 1 e 5' });
+        }
+        
+        // Verificar se o usuário existe na tabela CLIENTES
+        const [clienteExiste] = await pool.query('SELECT ID_USUARIO FROM CLIENTES WHERE ID_USUARIO = ?', [userId]);
+        
+        if (clienteExiste.length === 0) {
+            // Criar registro na tabela CLIENTES se não existir
+            await pool.query(
+                'INSERT INTO CLIENTES (ID_USUARIO, CPF_CLIENTE, DATA_NASC) VALUES (?, "00000000000", "1990-01-01")',
+                [userId]
+            );
+        }
+        
+        // Inserir avaliação
+        const [resultado] = await pool.query(`
+            INSERT INTO AVALIACOES_BRECHOS (ID_USUARIO, ID_BRECHO, NOTA, COMENTARIO, DT_AVALIACAO, HORA)
+            VALUES (?, ?, ?, ?, CURDATE(), CURTIME())
+        `, [userId, brechoId, nota, comentario]);
+        
+        if (resultado.insertId) {
+            res.json({ success: true, message: 'Avaliação criada com sucesso!' });
+        } else {
+            res.json({ success: false, message: 'Erro ao criar avaliação' });
+        }
+    } catch (error) {
+        console.log('Erro detalhado ao criar avaliação:', error);
+        
+        if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+            res.json({ success: false, message: 'Usuário não encontrado na base de dados' });
+        } else {
+            res.json({ success: false, message: 'Erro interno do servidor: ' + error.message });
+        }
     }
 });
 

@@ -183,49 +183,89 @@ class PerfilCliente {
     }
 
     async uploadProfilePhoto(input) {
-        if (!input.files || !input.files[0]) return;
+        if (!input.files || !input.files[0]) {
+            console.log('Nenhum arquivo selecionado');
+            return;
+        }
         
         const file = input.files[0];
+        console.log('Arquivo selecionado:', file.name, 'Tamanho:', file.size);
         
-        // Validações simples
+        // Validações
         if (!file.type.startsWith('image/')) {
             alert('Apenas imagens são permitidas!');
+            input.value = ''; // Limpar input
             return;
         }
         
         if (file.size > 5 * 1024 * 1024) {
             alert('Arquivo muito grande! Máximo 5MB.');
+            input.value = ''; // Limpar input
             return;
         }
+        
+        // Mostrar loading
+        const editBtn = document.querySelector('.photo-edit-btn');
+        const originalText = editBtn ? editBtn.innerHTML : '';
+        if (editBtn) editBtn.innerHTML = 'Enviando...';
         
         const formData = new FormData();
         formData.append('foto', file);
         
         try {
+            console.log('Enviando arquivo para o servidor...');
+            
             const response = await fetch('/upload-foto-perfil', {
                 method: 'POST',
                 body: formData
             });
             
+            console.log('Resposta recebida:', response.status);
+            
+            if (!response.ok) {
+                throw new Error('Erro na resposta do servidor: ' + response.status);
+            }
+            
             const data = await response.json();
+            console.log('Dados da resposta:', data);
             
             if (data.success) {
                 const newImageUrl = '/' + data.imagePath + '?t=' + Date.now();
+                console.log('Nova URL da imagem:', newImageUrl);
                 
-                // Atualizar imagens
+                // Atualizar todas as imagens de perfil na página
                 const profileImg = document.getElementById('profile-img');
-                if (profileImg) profileImg.src = newImageUrl;
+                if (profileImg) {
+                    profileImg.src = newImageUrl;
+                    console.log('Imagem de perfil atualizada');
+                }
                 
                 const headerImg = document.querySelector('.maria');
-                if (headerImg) headerImg.src = newImageUrl;
+                if (headerImg) {
+                    headerImg.src = newImageUrl;
+                    console.log('Imagem do header atualizada');
+                }
+                
+                // Atualizar outras imagens de perfil se existirem
+                const allProfileImages = document.querySelectorAll('img[src*="perfil"], .profile-image, .user-avatar');
+                allProfileImages.forEach(img => {
+                    if (img !== profileImg && img !== headerImg) {
+                        img.src = newImageUrl;
+                    }
+                });
                 
                 alert('Foto atualizada com sucesso!');
             } else {
-                alert('Erro: ' + data.error);
+                console.error('Erro do servidor:', data.error);
+                alert('Erro: ' + (data.error || 'Erro desconhecido'));
             }
         } catch (error) {
-            console.error('Erro:', error);
-            alert('Erro ao enviar foto. Tente novamente.');
+            console.error('Erro completo:', error);
+            alert('Erro ao enviar foto: ' + error.message);
+        } finally {
+            // Restaurar botão
+            if (editBtn) editBtn.innerHTML = originalText;
+            input.value = ''; // Limpar input
         }
     }
 

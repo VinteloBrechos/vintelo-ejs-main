@@ -69,6 +69,18 @@ const produtoModel = {
 
     delete: async (id) => {
         try {
+            // Exclusão física do produto (não apenas mudança de status)
+            const [resultados] = await pool.query("DELETE FROM PRODUTOS WHERE ID_PRODUTO = ?", [id]);
+            return resultados;
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    },
+
+    // Função para desativar produto (mudança de status)
+    deactivate: async (id) => {
+        try {
             const [resultados] = await pool.query("UPDATE PRODUTOS SET STATUS_PRODUTO = 'i' WHERE ID_PRODUTO = ?", [id]);
             return resultados;
         } catch (error) {

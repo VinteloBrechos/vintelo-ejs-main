@@ -92,44 +92,44 @@
                             <section class="form-row">
                                 <section class="form-group">
                                     <label for="nome_usu">Nome Completo</label>
-                                    <input type="text" id="nome_usu" name="nome_usu" value="<%= autenticado && autenticado.nome ? autenticado.nome : '' %>" required>
+                                    <input type="text" id="nome_usu" name="nome_usu" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.nome) ? usuario.nome : (autenticado && autenticado.nome ? autenticado.nome : '') %>" required>
                                 </section>
                                 <section class="form-group">
                                     <label for="email_usu">E-mail</label>
-                                    <input type="email" id="email_usu" name="email_usu" value="<%= autenticado && autenticado.email ? autenticado.email : '' %>" required>
+                                    <input type="email" id="email_usu" name="email_usu" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.email) ? usuario.email : (autenticado && autenticado.email ? autenticado.email : '') %>" required>
                                 </section>
                             </section>
                             
                             <section class="form-row">
                                 <section class="form-group">
                                     <label for="fone_usu">Telefone</label>
-                                    <input type="telefone" id="fone_usu" name="fone_usu" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.telefone) ? usuario.telefone : '(11) 99999-9999' %>" required>
+                                    <input type="tel" id="fone_usu" name="fone_usu" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.telefone) ? usuario.telefone : '' %>">
                                 </section>
                                 <section class="form-group">
                                     <label for="cnpj">CNPJ</label>
-                                    <input type="text" id="cnpj" name="cnpj" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.cnpj) ? usuario.cnpj : '' %>" maxlength="18" placeholder="00.000.000/0000-00" required>
+                                    <input type="text" id="cnpj" name="cnpj" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.cnpj) ? usuario.cnpj : '' %>" maxlength="18" placeholder="00.000.000/0000-00">
                                 </section>
                             </section>
                             
                             <section class="form-row">
                                 <section class="form-group">
                                     <label for="razao_social">Razão Social</label>
-                                    <input type="text" id="razao_social" name="razao_social" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.razao_social) ? usuario.razao_social : '' %>" minlength="5" maxlength="100" required>
+                                    <input type="text" id="razao_social" name="razao_social" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.razao_social) ? usuario.razao_social : '' %>" minlength="5" maxlength="100">
                                 </section>
                                 <section class="form-group">
                                     <label for="nome_fantasia">Nome Fantasia</label>
-                                    <input type="text" id="nome_fantasia" name="nome_fantasia" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.nome_fantasia) ? usuario.nome_fantasia : '' %>" minlength="2" maxlength="100" required>
+                                    <input type="text" id="nome_fantasia" name="nome_fantasia" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.nome_fantasia) ? usuario.nome_fantasia : '' %>" minlength="2" maxlength="100">
                                 </section>
                             </section>
                             
                             <section class="form-row">
                                 <section class="form-group">
                                     <label for="data_nasc">Data de Nascimento</label>
-                                    <input type="date" id="data_nasc" name="data_nasc" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.data_nasc) ? usuario.data_nasc : '' %>" placeholder="DD/MM/AAAA" required>
+                                    <input type="date" id="data_nasc" name="data_nasc" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.data_nasc) ? usuario.data_nasc : '' %>" placeholder="DD/MM/AAAA">
                                 </section>
                                 <section class="form-group">
                                     <label for="genero">Gênero</label>
-                                    <select id="genero" name="genero" required>
+                                    <select id="genero" name="genero">
                                         <option value="feminino" selected>Feminino</option>
                                         <option value="masculino">Masculino</option>
                                         <option value="outro">Outro</option>
@@ -145,34 +145,34 @@
                             <section class="form-row">
                                 <section class="form-group">
                                     <label for="cep">CEP</label>
-                                    <input type="text" id="cep" name="cep" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.cep) ? usuario.cep : '' %>" required>
+                                    <input type="text" id="cep" name="cep" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.cep) ? usuario.cep : '' %>">
                                 </section>
                                 <section class="form-group">
                                     <label for="numero">Número</label>
-                                    <input type="text" id="numero" name="numero" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.numero) ? usuario.numero : '' %>" required>
+                                    <input type="text" id="numero" name="numero" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.numero) ? usuario.numero : '' %>">
                                 </section>
                             </section>
                             
                             <section class="form-group">
                                 <label for="logradouro">Logradouro</label>
-                                <input type="text" id="logradouro" name="logradouro" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.logradouro) ? usuario.logradouro : '' %>" required>
+                                <input type="text" id="logradouro" name="logradouro" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.logradouro) ? usuario.logradouro : '' %>">
                             </section>
                             
                             <section class="form-row">
                                 <section class="form-group">
                                     <label for="bairro">Bairro</label>
-                                    <input type="text" id="bairro" name="bairro" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.bairro) ? usuario.bairro : '' %>" required>
+                                    <input type="text" id="bairro" name="bairro" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.bairro) ? usuario.bairro : '' %>">
                                 </section>
                                 <section class="form-group">
                                     <label for="cidade">Cidade</label>
-                                    <input type="text" id="cidade" name="cidade" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.cidade) ? usuario.cidade : '' %>" required>
+                                    <input type="text" id="cidade" name="cidade" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.cidade) ? usuario.cidade : '' %>">
                                 </section>
                             </section>
                             
                             <section class="form-row">
                                 <section class="form-group">
                                     <label for="estado">Estado</label>
-                                    <select id="estado" name="estado" required>
+                                    <select id="estado" name="estado">
                                         <option value="SP" <%= (typeof usuario !== 'undefined' && usuario && usuario.uf === 'SP') ? 'selected' : '' %>>São Paulo</option>
                                         <option value="RJ" <%= (typeof usuario !== 'undefined' && usuario && usuario.uf === 'RJ') ? 'selected' : '' %>>Rio de Janeiro</option>
                                         <option value="MG" <%= (typeof usuario !== 'undefined' && usuario && usuario.uf === 'MG') ? 'selected' : '' %>>Minas Gerais</option>
@@ -180,7 +180,7 @@
                                 </section>
                                 <section class="form-group">
                                     <label for="complemento">Complemento</label>
-                                    <input type="text" id="complemento" name="complemento" value="Apto 45">
+                                    <input type="text" id="complemento" name="complemento" value="<%= (typeof usuario !== 'undefined' && usuario && usuario.complemento) ? usuario.complemento : '' %>">
                                 </section>
                             </section>
                         </section>
